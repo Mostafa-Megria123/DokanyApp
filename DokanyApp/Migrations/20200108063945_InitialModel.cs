@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DokanyApp.Migrations
@@ -8,24 +9,11 @@ namespace DokanyApp.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Admin",
-                columns: table => new
-                {
-                    AdminId = table.Column<int>(nullable: false),
-                    AdminName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    Password = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    Email = table.Column<string>(unicode: false, maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Admin", x => x.AdminId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Category",
                 columns: table => new
                 {
-                    CategoryId = table.Column<int>(nullable: false),
+                    CategoryId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CategoryName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     Description = table.Column<string>(unicode: false, maxLength: 50, nullable: false)
                 },
@@ -35,42 +23,11 @@ namespace DokanyApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Customer",
-                columns: table => new
-                {
-                    CustomerId = table.Column<int>(nullable: false),
-                    FirstName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    Email = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    MobileNumber = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    CreditCardInfo = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    UserStatus = table.Column<string>(maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Customer", x => x.CustomerId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CustomerService",
-                columns: table => new
-                {
-                    CustomerServiceId = table.Column<int>(nullable: false),
-                    FirstName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    Email = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    MobileNumber = table.Column<string>(unicode: false, maxLength: 50, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CustomerService", x => x.CustomerServiceId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ShippingInfo",
                 columns: table => new
                 {
-                    ShippingId = table.Column<int>(nullable: false),
+                    ShippingId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ShippingType = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     ShippingCost = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     Description = table.Column<string>(unicode: false, maxLength: 50, nullable: false)
@@ -81,31 +38,37 @@ namespace DokanyApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Trader",
+                name: "User",
                 columns: table => new
                 {
-                    TraderId = table.Column<int>(nullable: false),
+                    UserId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     FirstName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     LastName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     Email = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
-                    MobileNumber = table.Column<string>(unicode: false, maxLength: 50, nullable: false)
+                    MobileNumber = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
+                    UserName = table.Column<string>(unicode: false, maxLength: 101, nullable: false, computedColumnSql: "(([FirstName]+' ')+[LastName])"),
+                    UserType = table.Column<string>(maxLength: 50, nullable: false),
+                    UserStatus = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Trader", x => x.TraderId);
+                    table.PrimaryKey("PK_User", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Product",
                 columns: table => new
                 {
-                    ProductId = table.Column<int>(nullable: false),
+                    ProductId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ProductName = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     BrandName = table.Column<string>(unicode: false, maxLength: 50, nullable: true),
                     Description = table.Column<string>(unicode: false, nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18, 0)", nullable: false),
                     ImageUrl = table.Column<string>(unicode: false, nullable: false),
                     CategoryId = table.Column<int>(nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false, computedColumnSql: "(getdate())"),
                     ProductAppreciate = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
@@ -120,57 +83,33 @@ namespace DokanyApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ShoppingCart",
-                columns: table => new
-                {
-                    CartId = table.Column<int>(nullable: false),
-                    Quantity = table.Column<int>(nullable: false),
-                    DateAdded = table.Column<DateTime>(type: "datetime", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ShoppingCart", x => x.CartId);
-                    table.ForeignKey(
-                        name: "CustomerShoppingCart",
-                        column: x => x.CartId,
-                        principalTable: "Customer",
-                        principalColumn: "CustomerId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CartItem",
                 columns: table => new
                 {
-                    CartItemId = table.Column<int>(nullable: false),
+                    CartItemId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(unicode: false, maxLength: 50, nullable: false),
                     Quantity = table.Column<int>(nullable: false),
                     UnitCost = table.Column<decimal>(type: "decimal(18, 0)", nullable: false),
                     Total = table.Column<decimal>(type: "decimal(18, 0)", nullable: false),
                     ShoppingCartId = table.Column<int>(nullable: false),
                     ProductId = table.Column<int>(nullable: false),
-                    TraderId = table.Column<int>(nullable: false)
+                    CustomerId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CartItem", x => x.CartItemId);
                     table.ForeignKey(
+                        name: "FK_CartItem_User",
+                        column: x => x.CustomerId,
+                        principalTable: "User",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_CartItem_Product",
                         column: x => x.ProductId,
                         principalTable: "Product",
                         principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CartItem_ShoppingCart",
-                        column: x => x.ShoppingCartId,
-                        principalTable: "ShoppingCart",
-                        principalColumn: "CartId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CartItem_Trader",
-                        column: x => x.TraderId,
-                        principalTable: "Trader",
-                        principalColumn: "TraderId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -178,36 +117,36 @@ namespace DokanyApp.Migrations
                 name: "Order",
                 columns: table => new
                 {
-                    OrderId = table.Column<int>(nullable: false),
+                    OrderId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CreationDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     ShippingDate = table.Column<DateTime>(type: "datetime", nullable: false),
                     CustomerId = table.Column<int>(nullable: false),
-                    OrderStatus = table.Column<int>(nullable: false),
                     ShippingId = table.Column<int>(nullable: false),
                     Description = table.Column<string>(unicode: false, nullable: false),
-                    ShoppingCartIId = table.Column<int>(nullable: false),
+                    CartItemIId = table.Column<int>(nullable: false),
                     OrderingStatus = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Order", x => x.OrderId);
                     table.ForeignKey(
-                        name: "CustomerOrder",
+                        name: "FK_Order_CartItem",
+                        column: x => x.CartItemIId,
+                        principalTable: "CartItem",
+                        principalColumn: "CartItemId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Order_User",
                         column: x => x.CustomerId,
-                        principalTable: "Customer",
-                        principalColumn: "CustomerId",
+                        principalTable: "User",
+                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Order_ShippingInfo",
                         column: x => x.ShippingId,
                         principalTable: "ShippingInfo",
                         principalColumn: "ShippingId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Order_ShoppingCart1",
-                        column: x => x.ShoppingCartIId,
-                        principalTable: "ShoppingCart",
-                        principalColumn: "CartId",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -239,6 +178,11 @@ namespace DokanyApp.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_CartItem_CustomerId",
+                table: "CartItem",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CartItem_ProductId",
                 table: "CartItem",
                 column: "ProductId");
@@ -249,9 +193,9 @@ namespace DokanyApp.Migrations
                 column: "ShoppingCartId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CartItem_TraderId",
-                table: "CartItem",
-                column: "TraderId");
+                name: "IX_Order_ShoppingCartIId",
+                table: "Order",
+                column: "CartItemIId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_CustomerId",
@@ -264,11 +208,6 @@ namespace DokanyApp.Migrations
                 column: "ShippingId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_ShoppingCartIId",
-                table: "Order",
-                column: "ShoppingCartIId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Product_CategoryId",
                 table: "Product",
                 column: "CategoryId");
@@ -277,37 +216,25 @@ namespace DokanyApp.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Admin");
-
-            migrationBuilder.DropTable(
-                name: "CartItem");
-
-            migrationBuilder.DropTable(
-                name: "CustomerService");
-
-            migrationBuilder.DropTable(
                 name: "OrderDetails");
-
-            migrationBuilder.DropTable(
-                name: "Trader");
 
             migrationBuilder.DropTable(
                 name: "Order");
 
             migrationBuilder.DropTable(
-                name: "Product");
+                name: "CartItem");
 
             migrationBuilder.DropTable(
                 name: "ShippingInfo");
 
             migrationBuilder.DropTable(
-                name: "ShoppingCart");
+                name: "User");
+
+            migrationBuilder.DropTable(
+                name: "Product");
 
             migrationBuilder.DropTable(
                 name: "Category");
-
-            migrationBuilder.DropTable(
-                name: "Customer");
         }
     }
 }

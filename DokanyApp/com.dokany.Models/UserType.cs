@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace DokanyApp.com.dokany.Models
 {
-    public enum UserStatusENU
+    public enum UserType
     {
-        NewUser, Active, Blocked, Retired
+        Admin, Trader, Customer
     }
 }

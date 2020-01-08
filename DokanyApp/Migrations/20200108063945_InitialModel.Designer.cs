@@ -4,14 +4,16 @@ using DokanyApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DokanyApp.Migrations
 {
-    [DbContext(typeof(ECommerceDBContext))]
-    partial class ECommerceDBContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(DokanyContext))]
+    [Migration("20200108063945_InitialModel")]
+    partial class InitialModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,33 +21,13 @@ namespace DokanyApp.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("DokanyApp.Models.Admin", b =>
-                {
-                    b.Property<int>("AdminId");
-
-                    b.Property<string>("AdminName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.HasKey("AdminId");
-
-                    b.ToTable("Admin");
-                });
-
             modelBuilder.Entity("DokanyApp.Models.CartItem", b =>
                 {
-                    b.Property<int>("CartItemId");
+                    b.Property<int>("CartItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CustomerId");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -61,25 +43,25 @@ namespace DokanyApp.Migrations
                     b.Property<decimal>("Total")
                         .HasColumnType("decimal(18, 0)");
 
-                    b.Property<int>("TraderId");
-
                     b.Property<decimal>("UnitCost")
                         .HasColumnType("decimal(18, 0)");
 
                     b.HasKey("CartItemId");
 
+                    b.HasIndex("CustomerId");
+
                     b.HasIndex("ProductId");
 
                     b.HasIndex("ShoppingCartId");
-
-                    b.HasIndex("TraderId");
 
                     b.ToTable("CartItem");
                 });
 
             modelBuilder.Entity("DokanyApp.Models.Category", b =>
                 {
-                    b.Property<int>("CategoryId");
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
@@ -96,80 +78,14 @@ namespace DokanyApp.Migrations
                     b.ToTable("Category");
                 });
 
-            modelBuilder.Entity("DokanyApp.Models.Customer", b =>
-                {
-                    b.Property<int>("CustomerId");
-
-                    b.Property<string>("CreditCardInfo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<string>("MobileNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<string>("UserName");
-
-                    b.Property<string>("UserStatus")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.HasKey("CustomerId");
-
-                    b.ToTable("Customer");
-                });
-
-            modelBuilder.Entity("DokanyApp.Models.CustomerService", b =>
-                {
-                    b.Property<int>("CustomerServiceId");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<string>("FullName");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.Property<string>("MobileNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
-
-                    b.HasKey("CustomerServiceId");
-
-                    b.ToTable("CustomerService");
-                });
-
             modelBuilder.Entity("DokanyApp.Models.Order", b =>
                 {
-                    b.Property<int>("OrderId");
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CartItemIid")
+                        .HasColumnName("CartItemIId");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime");
@@ -180,8 +96,6 @@ namespace DokanyApp.Migrations
                         .IsRequired()
                         .IsUnicode(false);
 
-                    b.Property<int>("OrderStatus");
-
                     b.Property<string>("OrderingStatus")
                         .IsRequired()
                         .HasMaxLength(50);
@@ -191,16 +105,14 @@ namespace DokanyApp.Migrations
 
                     b.Property<int>("ShippingId");
 
-                    b.Property<int>("ShoppingCartIid")
-                        .HasColumnName("ShoppingCartIId");
-
                     b.HasKey("OrderId");
+
+                    b.HasIndex("CartItemIid")
+                        .HasName("IX_Order_ShoppingCartIId");
 
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("ShippingId");
-
-                    b.HasIndex("ShoppingCartIid");
 
                     b.ToTable("Order");
                 });
@@ -226,13 +138,20 @@ namespace DokanyApp.Migrations
 
             modelBuilder.Entity("DokanyApp.Models.Product", b =>
                 {
-                    b.Property<int>("ProductId");
+                    b.Property<int>("ProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("BrandName")
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
                     b.Property<int>("CategoryId");
+
+                    b.Property<DateTime>("CreationDate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime")
+                        .HasComputedColumnSql("(getdate())");
 
                     b.Property<string>("Description")
                         .IsUnicode(false);
@@ -262,7 +181,9 @@ namespace DokanyApp.Migrations
 
             modelBuilder.Entity("DokanyApp.Models.ShippingInfo", b =>
                 {
-                    b.Property<int>("ShippingId");
+                    b.Property<int>("ShippingId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -284,23 +205,11 @@ namespace DokanyApp.Migrations
                     b.ToTable("ShippingInfo");
                 });
 
-            modelBuilder.Entity("DokanyApp.Models.ShoppingCart", b =>
+            modelBuilder.Entity("DokanyApp.Models.User", b =>
                 {
-                    b.Property<int>("CartId");
-
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("Quantity");
-
-                    b.HasKey("CartId");
-
-                    b.ToTable("ShoppingCart");
-                });
-
-            modelBuilder.Entity("DokanyApp.Models.Trader", b =>
-                {
-                    b.Property<int>("TraderId");
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -322,51 +231,55 @@ namespace DokanyApp.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
-                    b.Property<string>("UserName");
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasComputedColumnSql("(([FirstName]+' ')+[LastName])")
+                        .HasMaxLength(101)
+                        .IsUnicode(false);
 
                     b.Property<string>("UserStatus")
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.HasKey("TraderId");
+                    b.Property<string>("UserType")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
-                    b.ToTable("Trader");
+                    b.HasKey("UserId");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("DokanyApp.Models.CartItem", b =>
                 {
+                    b.HasOne("DokanyApp.Models.User", "Customer")
+                        .WithMany("CartItem")
+                        .HasForeignKey("CustomerId")
+                        .HasConstraintName("FK_CartItem_User");
+
                     b.HasOne("DokanyApp.Models.Product", "Product")
                         .WithMany("CartItem")
                         .HasForeignKey("ProductId")
                         .HasConstraintName("FK_CartItem_Product");
-
-                    b.HasOne("DokanyApp.Models.ShoppingCart", "ShoppingCart")
-                        .WithMany("CartItem")
-                        .HasForeignKey("ShoppingCartId")
-                        .HasConstraintName("FK_CartItem_ShoppingCart");
-
-                    b.HasOne("DokanyApp.Models.Trader", "Trader")
-                        .WithMany("CartItem")
-                        .HasForeignKey("TraderId")
-                        .HasConstraintName("FK_CartItem_Trader");
                 });
 
             modelBuilder.Entity("DokanyApp.Models.Order", b =>
                 {
-                    b.HasOne("DokanyApp.Models.Customer", "Customer")
+                    b.HasOne("DokanyApp.Models.CartItem", "CartItemI")
+                        .WithMany("Order")
+                        .HasForeignKey("CartItemIid")
+                        .HasConstraintName("FK_Order_CartItem");
+
+                    b.HasOne("DokanyApp.Models.User", "Customer")
                         .WithMany("Order")
                         .HasForeignKey("CustomerId")
-                        .HasConstraintName("CustomerOrder");
+                        .HasConstraintName("FK_Order_User");
 
                     b.HasOne("DokanyApp.Models.ShippingInfo", "Shipping")
                         .WithMany("Order")
                         .HasForeignKey("ShippingId")
                         .HasConstraintName("FK_Order_ShippingInfo");
-
-                    b.HasOne("DokanyApp.Models.ShoppingCart", "ShoppingCartI")
-                        .WithMany("Order")
-                        .HasForeignKey("ShoppingCartIid")
-                        .HasConstraintName("FK_Order_ShoppingCart1");
                 });
 
             modelBuilder.Entity("DokanyApp.Models.OrderDetails", b =>
@@ -388,14 +301,6 @@ namespace DokanyApp.Migrations
                         .WithMany("Product")
                         .HasForeignKey("CategoryId")
                         .HasConstraintName("FK_Product_Category");
-                });
-
-            modelBuilder.Entity("DokanyApp.Models.ShoppingCart", b =>
-                {
-                    b.HasOne("DokanyApp.Models.Customer", "Cart")
-                        .WithOne("ShoppingCart")
-                        .HasForeignKey("DokanyApp.Models.ShoppingCart", "CartId")
-                        .HasConstraintName("CustomerShoppingCart");
                 });
 #pragma warning restore 612, 618
         }

@@ -9,10 +9,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Swagger;
-using DokanyApp.Models;
 using Microsoft.EntityFrameworkCore;
 using DokanyApp.com.dokany.Services;
 using Microsoft.AspNetCore.Http;
+using DokanyApp.Models;
 
 namespace DokanyApp
 {
@@ -67,7 +67,7 @@ namespace DokanyApp
             });
 
             services.ConfigureJwtAuthentication();
-            services.AddDbContext<ECommerceDBContext>(options =>
+            services.AddDbContext<DokanyContext>(options =>
                 options.UseSqlServer(
                    Configuration.GetConnectionString("Dokany")));
         }

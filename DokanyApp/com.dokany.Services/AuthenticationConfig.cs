@@ -47,13 +47,6 @@ namespace JwtAuthentication.Shared
                 };
             }
 
-            //var claims = new[]
-            //{
-            //    new Claim(ClaimTypes.Role, "Administrator"),
-            //    new Claim("Password", password),
-            //    new Claim("Role", "1"),
-            //};
-
             var token = new JwtSecurityToken("https://localhost:44325/",
                 "https://localhost:44325/",
                 claims,

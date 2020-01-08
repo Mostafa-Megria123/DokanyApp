@@ -10,32 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20191223035421_InitialModel.cs" />
-    <Compile Remove="Migrations\20191223035421_InitialModel.Designer.cs" />
-    <Compile Remove="Migrations\20191223041428_InitialModel.cs" />
-    <Compile Remove="Migrations\20191223041428_InitialModel.Designer.cs" />
-    <Compile Remove="Migrations\20191223042518_InitialModel.cs" />
-    <Compile Remove="Migrations\20191223042518_InitialModel.Designer.cs" />
-    <Compile Remove="Migrations\20191223043256_EnumPropMigr.cs" />
-    <Compile Remove="Migrations\20191223043256_EnumPropMigr.Designer.cs" />
-    <Compile Remove="Migrations\20191223045500_InitialModel.cs" />
-    <Compile Remove="Migrations\20191223045500_InitialModel.Designer.cs" />
-    <Compile Remove="Migrations\20191223050605_EnumPropMigr.cs" />
-    <Compile Remove="Migrations\20191223050605_EnumPropMigr.Designer.cs" />
-    <Compile Remove="Migrations\20191226052729_UpdateIDAutoGen.cs" />
-    <Compile Remove="Migrations\20191226052729_UpdateIDAutoGen.Designer.cs" />
-    <Compile Remove="Migrations\20191226053733_UpdateIDAutoGen.cs" />
-    <Compile Remove="Migrations\20191226053733_UpdateIDAutoGen.Designer.cs" />
-    <Compile Remove="Migrations\20191226060543_UpdateIDAutoGen.cs" />
-    <Compile Remove="Migrations\20191226060543_UpdateIDAutoGen.Designer.cs" />
-    <Compile Remove="Migrations\20191227165925_UpdateIDAutoGenIdentity.cs" />
-    <Compile Remove="Migrations\20191227165925_UpdateIDAutoGenIdentity.Designer.cs" />
-    <Compile Remove="Migrations\20191227174328_UpdateIDAutoGen.cs" />
-    <Compile Remove="Migrations\20191227174328_UpdateIDAutoGen.Designer.cs" />
-    <Compile Remove="Migrations\20191227174648_UpdateIDAutoGen1.cs" />
-    <Compile Remove="Migrations\20191227174648_UpdateIDAutoGen1.Designer.cs" />
-    <Compile Remove="Migrations\20191227180633_UpdateIDAutoGen.cs" />
-    <Compile Remove="Migrations\20191227180633_UpdateIDAutoGen.Designer.cs" />
+    <Compile Remove="Migrations\20200108063402_InitialModel.cs" />
+    <Compile Remove="Migrations\20200108063402_InitialModel.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -11,7 +11,7 @@ namespace DokanyApp.Controllers
     [ApiController]
     //[Authorize(Roles = "Trader")]
     public class ValuesController : ControllerBase
-    {
+    {  
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()

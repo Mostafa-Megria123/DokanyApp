@@ -5,37 +5,31 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DokanyApp.Models
 {
-    public partial class ECommerceDBContext : DbContext
+    public partial class DokanyContext : DbContext
     {
-        public ECommerceDBContext()
+        public DokanyContext()
         {
         }
 
-        public ECommerceDBContext(DbContextOptions<ECommerceDBContext> options)
+        public DokanyContext(DbContextOptions<DokanyContext> options)
             : base(options)
         {
         }
 
-        public virtual DbSet<Admin> Admin { get; set; }
         public virtual DbSet<CartItem> CartItem { get; set; }
         public virtual DbSet<Category> Category { get; set; }
-        public virtual DbSet<Customer> Customer { get; set; }
-        public virtual DbSet<CustomerService> CustomerService { get; set; }
         public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderDetails> OrderDetails { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ShippingInfo> ShippingInfo { get; set; }
-        public virtual DbSet<ShoppingCart> ShoppingCart { get; set; }
-        public virtual DbSet<Trader> Trader { get; set; }
+        public virtual DbSet<User> User { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-#pragma warning disable CS1030 // #warning directive
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=.;Database=Dokany;Trusted_Connection=True;");
-#pragma warning restore CS1030 // #warning directive
             }
         }
 
@@ -43,29 +37,11 @@ namespace DokanyApp.Models
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
 
-            modelBuilder.Entity<Admin>(entity =>
-            {
-                entity.Property(e => e.AdminId).ValueGeneratedNever();
-
-                entity.Property(e => e.AdminName)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
-
             modelBuilder.Entity<CartItem>(entity =>
             {
-                entity.Property(e => e.CartItemId).ValueGeneratedNever();
+                entity.HasIndex(e => e.ProductId);
+
+                entity.HasIndex(e => e.ShoppingCartId);
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -76,29 +52,21 @@ namespace DokanyApp.Models
 
                 entity.Property(e => e.UnitCost).HasColumnType("decimal(18, 0)");
 
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.CartItem)
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CartItem_User");
+
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.CartItem)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CartItem_Product");
-
-                entity.HasOne(d => d.ShoppingCart)
-                    .WithMany(p => p.CartItem)
-                    .HasForeignKey(d => d.ShoppingCartId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CartItem_ShoppingCart");
-
-                entity.HasOne(d => d.Trader)
-                    .WithMany(p => p.CartItem)
-                    .HasForeignKey(d => d.TraderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CartItem_Trader");
             });
 
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.Property(e => e.CategoryId).ValueGeneratedNever();
-
                 entity.Property(e => e.CategoryName)
                     .IsRequired()
                     .HasMaxLength(50)
@@ -110,71 +78,16 @@ namespace DokanyApp.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<Customer>(entity =>
-            {
-                entity.Property(e => e.CustomerId).ValueGeneratedNever();
-
-                entity.Property(e => e.CreditCardInfo)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.MobileNumber)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UserStatus)
-                    .HasMaxLength(50)
-                    .HasConversion(x => x.ToString(), // to converter
-                    x => (UserStatusENU)Enum.Parse(typeof(UserStatusENU), x));
-                //Megria
-
-            });
-
-            modelBuilder.Entity<CustomerService>(entity =>
-            {
-                entity.Property(e => e.CustomerServiceId).ValueGeneratedNever();
-
-                entity.Property(e => e.Email)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.MobileNumber)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-            });
-
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.Property(e => e.OrderId).ValueGeneratedNever();
+                entity.HasIndex(e => e.CartItemIid)
+                    .HasName("IX_Order_ShoppingCartIId");
+
+                entity.HasIndex(e => e.CustomerId);
+
+                entity.HasIndex(e => e.ShippingId);
+
+                entity.Property(e => e.CartItemIid).HasColumnName("CartItemIId");
 
                 entity.Property(e => e.CreationDate).HasColumnType("datetime");
 
@@ -184,30 +97,28 @@ namespace DokanyApp.Models
 
                 entity.Property(e => e.ShippingDate).HasColumnType("datetime");
 
-                entity.Property(e => e.ShoppingCartIid).HasColumnName("ShoppingCartIId");
-
                 entity.Property(e => e.OrderingStatus)
-                    .HasMaxLength(50)
-                    .HasConversion(x => x.ToString(), // to converter
-                    x => (OrderStatusENU)Enum.Parse(typeof(OrderStatusENU), x));
+                     .HasMaxLength(50)
+                     .HasConversion(x => x.ToString(), // to converter
+                     x => (OrderStatusENU)Enum.Parse(typeof(UserStatusENU), x));
+
+                entity.HasOne(d => d.CartItemI)
+                    .WithMany(p => p.Order)
+                    .HasForeignKey(d => d.CartItemIid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Order_CartItem");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Order)
                     .HasForeignKey(d => d.CustomerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("CustomerOrder");
+                    .HasConstraintName("FK_Order_User");
 
                 entity.HasOne(d => d.Shipping)
                     .WithMany(p => p.Order)
                     .HasForeignKey(d => d.ShippingId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_ShippingInfo");
-
-                entity.HasOne(d => d.ShoppingCartI)
-                    .WithMany(p => p.Order)
-                    .HasForeignKey(d => d.ShoppingCartIid)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_ShoppingCart1");
             });
 
             modelBuilder.Entity<OrderDetails>(entity =>
@@ -233,11 +144,15 @@ namespace DokanyApp.Models
 
             modelBuilder.Entity<Product>(entity =>
             {
-                entity.Property(e => e.ProductId).ValueGeneratedNever();
+                entity.HasIndex(e => e.CategoryId);
 
                 entity.Property(e => e.BrandName)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.CreationDate)
+                    .HasColumnType("datetime")
+                    .HasComputedColumnSql("(getdate())");
 
                 entity.Property(e => e.Description).IsUnicode(false);
 
@@ -252,10 +167,10 @@ namespace DokanyApp.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ProductAppreciate)
-                    .HasMaxLength(50)
-                    .HasConversion(x => x.ToString(), // to converter
-                    x => (ProductAppreciateENU)Enum.Parse(typeof(ProductAppreciateENU), x));
+                entity.Property(p => p.ProductAppreciate)
+                     .HasMaxLength(50)
+                     .HasConversion(x => x.ToString(), // to converter
+                     x => (ProductAppreciateENU)Enum.Parse(typeof(ProductAppreciateENU), x));
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Product)
@@ -267,8 +182,6 @@ namespace DokanyApp.Models
             modelBuilder.Entity<ShippingInfo>(entity =>
             {
                 entity.HasKey(e => e.ShippingId);
-
-                entity.Property(e => e.ShippingId).ValueGeneratedNever();
 
                 entity.Property(e => e.Description)
                     .IsRequired()
@@ -286,25 +199,8 @@ namespace DokanyApp.Models
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<ShoppingCart>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
-                entity.HasKey(e => e.CartId);
-
-                entity.Property(e => e.CartId).ValueGeneratedNever();
-
-                entity.Property(e => e.DateAdded).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Cart)
-                    .WithOne(p => p.ShoppingCart)
-                    .HasForeignKey<ShoppingCart>(d => d.CartId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("CustomerShoppingCart");
-            });
-
-            modelBuilder.Entity<Trader>(entity =>
-            {
-                entity.Property(e => e.TraderId).ValueGeneratedNever();
-
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(50)
@@ -325,10 +221,21 @@ namespace DokanyApp.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.UserStatus)
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(101)
+                    .IsUnicode(false)
+                    .HasComputedColumnSql("(([FirstName]+' ')+[LastName])");
+
+                entity.Property(p => p.UserStatus)
                     .HasMaxLength(50)
                     .HasConversion(x => x.ToString(), // to converter
                     x => (UserStatusENU)Enum.Parse(typeof(UserStatusENU), x));
+
+                entity.Property(t => t.UserType)
+                    .HasMaxLength(50)
+                    .HasConversion(x => x.ToString(), // to converter
+                    x => (UserType)Enum.Parse(typeof(UserType), x));
             });
         }
     }

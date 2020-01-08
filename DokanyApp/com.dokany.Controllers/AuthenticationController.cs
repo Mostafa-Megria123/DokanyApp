@@ -20,10 +20,11 @@ namespace JwtAuthentication.Controllers
     public class AuthenticationController : ControllerBase
     {
         public static string resultedToken;
-        private readonly ECommerceDBContext _context;
+        private readonly DokanyContext _context;
         private readonly ITokenManager _tokenManager;
 
-        public AuthenticationController(ECommerceDBContext context, ITokenManager tokenManager)
+        public AuthenticationController(DokanyContext context,
+            ITokenManager tokenManager)
         {
             _context = context;
             _tokenManager = tokenManager;
@@ -32,8 +33,8 @@ namespace JwtAuthentication.Controllers
         [HttpGet]
         public string Get(string username, string password, string userType)
         {
-            return (username == "Mostafa" && password == "Mm_123456" && userType == "Customer") 
-                ? AuthenticationConfig.GenertateJsonWebToken(username, password, userType) 
+            return (username == "Mostafa" && password == "Mm_123456" && userType == "Customer")
+                ? AuthenticationConfig.GenertateJsonWebToken(username, password, userType)
                 : "Please enter a valid parameters";
         }
 
@@ -48,7 +49,7 @@ namespace JwtAuthentication.Controllers
             var username = claim.Where(U => U.Type == "Username").Select(U => U.Value).SingleOrDefault();
             var password = claim.Where(P => P.Type == "Password").Select(U => U.Value).SingleOrDefault();
 
-            return "Hey " + username + " Megria is here and Ur password is " + password + " :D";
+            return "Hey " + username + " is here and Ur password is " + password + " :D";
         }
 
         [HttpGet("Registeration")]
@@ -56,30 +57,29 @@ namespace JwtAuthentication.Controllers
         {
             if (userType.Equals("customer", StringComparison.InvariantCultureIgnoreCase))
             {
-                var customerId = _context.Customer.Select(c => c.CustomerId).LastOrDefault() + 1;
-                _context.Customer.Add(new Customer()
+                //var customerId = _context.Customer.Select(c => c.CustomerId).LastOrDefault() + 1;
+                _context.User.Add(new User()
                 {
-                    CustomerId = customerId,
                     FirstName = firstName,
                     LastName = lastName,
                     Email = email,
                     MobileNumber = mobileNumber,
                     UserStatus = DokanyApp.com.dokany.Models.UserStatusENU.NewUser,
-                    UserName = firstName + lastName
+                    UserType = DokanyApp.com.dokany.Models.UserType.Customer
                 });
             }
             else if (userType.Equals("trader", StringComparison.InvariantCultureIgnoreCase))
             {
-                var traderId = _context.Trader.Select(c => c.TraderId).LastOrDefault() + 1;
-                _context.Trader.Add(new Trader()
+                //var traderId = _context.User.Select(c => c.TraderId).LastOrDefault() + 1;
+                _context.User.Add(new DokanyApp.Models.User()
                 {
-                    TraderId = traderId,
                     FirstName = firstName,
                     LastName = lastName,
                     Email = email,
                     MobileNumber = mobileNumber,
                     UserStatus = DokanyApp.com.dokany.Models.UserStatusENU.NewUser,
-                    UserName = firstName + lastName
+                    UserType = DokanyApp.com.dokany.Models.UserType.Trader
+
                 });
             }
             await _context.SaveChangesAsync();
@@ -90,8 +90,8 @@ namespace JwtAuthentication.Controllers
         {
             if (userType.Equals("customer", StringComparison.InvariantCultureIgnoreCase))
             {
-                var username = _context.Customer.Where(c => c.UserName == _username).FirstOrDefault().ToString();
-                var password = _context.Customer.FirstOrDefault(m => m.MobileNumber == _password).MobileNumber;
+                var username = _context.User.Where(c => c.UserName == _username).FirstOrDefault().ToString();
+                var password = _context.User.FirstOrDefault(m => m.MobileNumber == _password).MobileNumber;
 
                 if (username == _username && password == _password)
                 {
@@ -101,8 +101,8 @@ namespace JwtAuthentication.Controllers
             }
             else if (userType.Equals("trader", StringComparison.InvariantCultureIgnoreCase))
             {
-                var username = _context.Trader.FirstOrDefault(u => u.UserName == _username).UserName;
-                var password = _context.Trader.FirstOrDefault(t => t.MobileNumber == _password).MobileNumber;
+                var username = _context.User.FirstOrDefault(u => u.UserName == _username).UserName;
+                var password = _context.User.FirstOrDefault(t => t.MobileNumber == _password).MobileNumber;
 
                 if (username == _username && password == _password)
                 {
