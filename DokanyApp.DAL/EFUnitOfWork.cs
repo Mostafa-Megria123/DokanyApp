@@ -1,12 +1,11 @@
-﻿using DokanyApp.BLL;
-using DokanyApp.BLL.DTO;
-//using DokanyApp.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using System;
 using System.Threading.Tasks;
+using DokanyApp.BLL;
+using Microsoft.EntityFrameworkCore;
 
 namespace DokanyApp.DAL
 {
-    public class EFUnitOfWork : DbContext, IUnitOfWork
+    public partial class EFUnitOfWork : DbContext, IUnitOfWork
     {
         public EFUnitOfWork()
         {
@@ -17,11 +16,6 @@ namespace DokanyApp.DAL
         {
         }
 
-        public Task CommitAsync()
-        {
-            return SaveChangesAsync();
-        }
-
         public virtual DbSet<CartItem> CartItem { get; set; }
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Order> Order { get; set; }
@@ -30,6 +24,9 @@ namespace DokanyApp.DAL
         public virtual DbSet<ShippingInfo> ShippingInfo { get; set; }
         public virtual DbSet<User> User { get; set; }
 
+        public async Task CommitAsync()
+            => await SaveChangesAsync();
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

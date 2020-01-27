@@ -1,14 +1,14 @@
-﻿using DokanyApp.Models;
-using System.Collections;
+﻿using System.Linq;
+using System.Threading.Tasks;
 
-namespace DokanyApp.Core.InterfacesRepo
+namespace DokanyApp.BLL
 {
     public interface ICategoryService
     {
-        void Add(Category p);
-        void Edit(Category p);
-        void Remove(int Id);
-        IEnumerable GetCategories();  
-        Category FindById(int Id);
+        Task Add(Category categoryName);
+        Task Update(Category categoryName);
+        Task Remove(int Id);
+        IQueryable<Category> Get();
+        Task<Category> FindById(int Id);
     }    
 }

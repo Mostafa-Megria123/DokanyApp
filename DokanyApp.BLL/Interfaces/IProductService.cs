@@ -1,15 +1,17 @@
-﻿using DokanyApp.Models;
-using System.Collections;
+﻿using DokanyApp.BLL.DTO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace DokanyApp.Core.InterfacesRepo
+namespace DokanyApp.BLL
 {
     public interface IProductService
     {
-        void Add(Product p);
-        void Edit(Product p);
-        void Remove(int Id);
-        IEnumerable GetProducts();
-        Product FindById(int Id);
+        Task<ProductDTO> Add(Product product);
+        Task Update(Product product);
+        Task Remove(int Id);
+        IQueryable<ProductDTO> Get();
+        ProductDTO FindById(int Id);
     }
 }
    

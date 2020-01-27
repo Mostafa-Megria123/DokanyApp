@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace JwtAuthentication.Shared
+namespace DokanyApp.Services
 {
     public static class AuthenticationConfig
     {

@@ -1,13 +1,14 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Threading.Tasks;
 
-namespace DokanyApp.Core.InterfacesRepo
+namespace DokanyApp.BLL
 {
-    public interface IOrderRepository
+    public interface IOrderService
     {
-        void Add(Order p);
-        void Edit(Order p);
-        void Remove(int Id);
-        IEnumerable GetOrders();
-        Order FindById(int Id);
+        Task Add(Order order);
+        Task Update(Order order);
+        Task Remove(int Id);
+        IQueryable<Order> Get();
+        Task<Order> FindById(int Id);
     }
 }

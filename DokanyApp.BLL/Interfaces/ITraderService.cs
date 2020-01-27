@@ -1,13 +1,13 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Threading.Tasks;
 
-namespace DokanyApp.Core.InterfacesRepo
+namespace DokanyApp.BLL
 {
-    public interface IAdminRepository
+    public interface ITraderService
     {
-        void Add(Product p);
-        void Edit(Product p);
-        void Remove(int Id);
-        IEnumerable GetProducts();
-        Product FindById(int Id);
+        Task Add(User user);
+        Task Remove(int Id);
+        IQueryable<User> Get();
+        Task<User> FindById(int Id);
     }
 }

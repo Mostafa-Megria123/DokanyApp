@@ -1,8 +1,6 @@
-﻿using DokanyApp.com.dokany.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
-namespace DokanyApp.Models
+namespace DokanyApp.BLL
 {
     public partial class Order
     {

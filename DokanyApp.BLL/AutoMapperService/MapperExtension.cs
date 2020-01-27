@@ -1,0 +1,37 @@
+﻿using AutoMapper;
+using DokanyApp.BLL.DTO;
+using System.Linq;
+
+namespace DokanyApp.BLL.AutoMapperService
+{
+    /// <summary>
+    /// Make Sure That When your application runs, Automapper will go through the solution 
+    /// looking for classes that inherit from “Profile”, and will load their configuration.
+    /// 
+    /// </summary>   
+    public class MapperExtension : Profile
+    {
+        public MapperExtension()
+        {
+            CreateMap<CartItem, CartItemDTO>();
+            CreateMap<Category, CategoryDTO>();
+            CreateMap<Order, OrderDTO>();
+            CreateMap<Product, ProductDTO>();
+
+            CreateMap<User, AdminDTO>()
+                .ForMember(dest => dest.AdminId, act => act.MapFrom(src => src.UserId))
+                .ForMember(dest => dest.AdminStatus, act => act.MapFrom(src => src.UserStatus));
+
+            CreateMap<User, CustomerDTO>()
+                .ForMember(dest => dest.CustomerId, act => act.MapFrom(src => src.UserId))
+                .ForMember(dest => dest.CustomerStatus, act => act.MapFrom(src => src.UserStatus));
+
+            CreateMap<User, TraderDTO>()
+                .ForMember(dest => dest.TraderId, act => act.MapFrom(src => src.UserId))
+                .ForMember(dest => dest.TraderStatus, act => act.MapFrom(src => src.UserStatus));
+
+            CreateMap<ShippingInfo, ShippingInfoDTO>()
+                .ForMember(dest => dest.Address, act => act.MapFrom(src => src.Description));
+        }
+    }
+}

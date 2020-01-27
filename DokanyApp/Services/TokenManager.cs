@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DokanyApp.com.dokany.Services
+namespace DokanyApp.Services
 {
     public class TokenManager : ITokenManager
     {

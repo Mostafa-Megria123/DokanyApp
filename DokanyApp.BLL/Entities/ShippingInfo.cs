@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace DokanyApp.Models
+namespace DokanyApp.BLL
 {
     public partial class ShippingInfo
     {

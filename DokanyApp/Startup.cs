@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using JwtAuthentication.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +9,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.EntityFrameworkCore;
-using DokanyApp.com.dokany.Services;
 using Microsoft.AspNetCore.Http;
-using DokanyApp.Models;
+using DokanyApp.DAL;
+using AutoMapper;
+using DokanyApp.BLL;
+using DokanyApp.BLL.Products;
+using DokanyApp.Services;
 
 namespace DokanyApp
 {
@@ -28,6 +30,8 @@ namespace DokanyApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // To Make AutoMapper Compatible With the Version Of Solution (typeof(Startup))
+            services.AddAutoMapper(typeof(Startup)); 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSwaggerGen(options =>
             {
@@ -46,6 +50,11 @@ namespace DokanyApp
                     },
                 });
             });
+
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient(typeof(IRepository<>), typeof(EFRepository<>));
+            services.AddScoped<IUnitOfWork, EFUnitOfWork>();
+            services.AddTransient<EFUnitOfWork, EFUnitOfWork>();
 
             //AddTransient not Middleware Because it's Custom Middleware
             services.AddTransient<TokenManagerMiddleware>();
@@ -67,7 +76,7 @@ namespace DokanyApp
             });
 
             services.ConfigureJwtAuthentication();
-            services.AddDbContext<DokanyContext>(options =>
+            services.AddDbContext<EFUnitOfWork>(options =>
                 options.UseSqlServer(
                    Configuration.GetConnectionString("Dokany")));
         }

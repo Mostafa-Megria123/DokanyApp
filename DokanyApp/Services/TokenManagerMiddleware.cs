@@ -2,7 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 
-namespace DokanyApp.com.dokany.Services
+namespace DokanyApp.Services
 {
     public class TokenManagerMiddleware : IMiddleware
     {

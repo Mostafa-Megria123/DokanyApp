@@ -1,42 +1,65 @@
-﻿using System;
-using System.Collections;
-using DokanyApp.Core.InterfacesRepo;
-using DokanyApp.Models;
+﻿using AutoMapper;
+using DokanyApp.BLL.DTO;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DokanyApp.BLL.Products
 {
-    class ProductService : IProductService
+    public class ProductService : IProductService
     {
-        //inject DBcontext
-        private readonly ProductContext ProductContext;
-        public ProductService()
+        private IRepository<Product> productRepository;
+        private IUnitOfWork uof;
+        private readonly IMapper mapper;
+
+        public ProductService(IRepository<Product> productRepository,
+            IUnitOfWork uof, IMapper mapper)
         {
-            ProductContext = new ProductContext();
+            this.productRepository = productRepository;
+            this.uof = uof;
+            this.mapper = mapper;
         }
 
-        public void Add(Product p)
+        public async Task<ProductDTO> Add(Product product)
         {
-            throw new NotImplementedException();
+            productRepository.Add(product);
+            await uof.CommitAsync();
+            var prdDto = mapper.Map<ProductDTO>(product);
+
+            return prdDto;
         }
 
-        public void Edit(Product p)
+        public ProductDTO FindById(int Id)
         {
-            throw new NotImplementedException();
+            if (Id < 1) throw new ArgumentException("id must be positive int");
+            var prd = productRepository.Get().FirstOrDefault(p => p.ProductId == Id);
+            var prdDTO = mapper.Map<ProductDTO>(prd);
+
+            return prdDTO;
         }
 
-        public Product FindById(int Id)
+        public IQueryable<ProductDTO> Get()
         {
-            throw new NotImplementedException();
+            var prd = productRepository.Get().FirstOrDefault(); 
+            var prdDTO = mapper.Map<IQueryable<ProductDTO>>(prd);
+
+            // use 'yield return prdDTO;' in case of using IEnumerable as a returned value
+            return prdDTO;
         }
 
-        public IEnumerable GetProducts()
+        public async Task Remove(int Id)
         {
-            throw new NotImplementedException();
+            if (Id < 1) throw new ArgumentException("id must be positive int");
+            var prd = productRepository.Get().FirstOrDefault(p => p.ProductId == Id);
+            productRepository.Remove(prd);
+
+            await uof.CommitAsync();
         }
 
-        public void Remove(int Id)
+        public async Task Update(Product product)
         {
-            throw new NotImplementedException();
+            productRepository.Modify(product);
+            await uof.CommitAsync();
         }
     }
 }

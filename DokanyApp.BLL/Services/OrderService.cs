@@ -1,42 +1,46 @@
-﻿using System;
-using System.Collections;
-using DokanyApp.Core.InterfacesRepo;
-using DokanyApp.Models;
+﻿using System.Linq;
+using System.Threading.Tasks;
 
-namespace DokanyApp.BLL.Orders
+namespace DokanyApp.BLL
 {
-    class OrderService : IProductService
+
+    class OrderService : IOrderService
     {
-        //inject DBcontext
-        private readonly OrderContext ProductContext;
-        public OrderService()
+        private readonly IRepository<Order> orderRepository;
+        private readonly IUnitOfWork uof;
+
+        public OrderService(IRepository<Order> orderRepository,
+            IUnitOfWork uof)
         {
-            ProductContext = new OrderContext();
+            this.orderRepository = orderRepository;
+            this.uof = uof;
         }
 
-        public void Add(Product p)
+        public IRepository<Order> OrderRepository { get; }
+
+        public Task Add(Order order)
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
-        public void Edit(Product p)
+        public Task<Order> FindById(int Id)
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
-        public Product FindById(int Id)
+        public IQueryable<Order> Get()
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
-        public IEnumerable GetProducts()
+        public Task Remove(int Id)
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
 
-        public void Remove(int Id)
+        public Task Update(Order order)
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
     }
 }

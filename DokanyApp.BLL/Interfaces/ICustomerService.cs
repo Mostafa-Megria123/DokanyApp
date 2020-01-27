@@ -1,12 +1,13 @@
-﻿using System.Collections;
-namespace DokanyApp.Core.InterfacesRepo
+﻿using System.Linq;
+using System.Threading.Tasks;
+
+namespace DokanyApp.BLL
 {
-    public interface ICustomerRepository
+    public interface ICustomerService
     {
-        void Add(Customer p);
-        void Edit(Customer p);
-        void Remove(int Id);
-        IEnumerable GetCustomers();
-        Customer FindById(int Id);
+        Task Add(User user);
+        Task Remove(int Id);
+        IQueryable<User> Get();
+        Task<User> FindById(int Id);
     }
 }
