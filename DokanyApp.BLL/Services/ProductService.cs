@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
-using DokanyApp.BLL.DTO;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DokanyApp.BLL.Products
+namespace DokanyApp.BLL
 {
     public class ProductService : IProductService
     {

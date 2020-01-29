@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DokanyApp.BLL.DTO
+namespace DokanyApp.BLL
 {
     public class OrderDTO
     {

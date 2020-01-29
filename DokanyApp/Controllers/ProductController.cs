@@ -1,4 +1,5 @@
 ﻿using DokanyApp.BLL;
+using DokanyApp.LoggingService;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -9,15 +10,23 @@ namespace DokanyApp.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService productService;
-        public ProductController(IProductService productService)
+        private readonly ILoggerManager logger;
+
+        public ProductController(IProductService productService,
+            ILoggerManager logger)
         {
             this.productService = productService ?? throw new ArgumentNullException(nameof(productService));
+            this.logger = logger;
         }
 
         [HttpGet("Products")]
         public IActionResult Get()
         {
-            var data = productService.Get();
+            logger.LogInfo("Here is info message from the Eslaaaam.");
+            var data = productService.FindById(1);
+            logger.LogDebug("Here is debug message from the Megria.");
+            logger.LogError("Here is debug message from the Dola.");
+
             return Ok(data);
         }
     }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DokanyApp.BLL.DTO
+namespace DokanyApp.BLL
 {
     public class CustomerDTO
     {

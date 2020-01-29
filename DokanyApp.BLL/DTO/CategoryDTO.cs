@@ -1,4 +1,4 @@
-﻿namespace DokanyApp.BLL.DTO
+﻿namespace DokanyApp.BLL
 {
     public class CategoryDTO
     {
