@@ -1,14 +1,15 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DokanyApp.BLL
 {
     public interface IOrderService
     {
-        Task Add(Order order);
-        Task Update(Order order);
+        Task<List<OrderDTO>> Get();
+        Task<OrderDTO> FindById(int Id);
         Task Remove(int Id);
-        IQueryable<Order> Get();
-        Task<Order> FindById(int Id);
+        Task<int> Add(Order order);
+        Task Update(Order order);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DokanyApp.BLL
@@ -12,53 +12,70 @@ namespace DokanyApp.BLL
         private readonly IMapper mapper;
 
         public ProductService(IRepository<Product> productRepository,
-            IUnitOfWork uof, IMapper mapper)
+            IUnitOfWork uof,
+            IMapper mapper)
         {
             this.productRepository = productRepository;
             this.uof = uof;
             this.mapper = mapper;
         }
 
-        public async Task<ProductDTO> Add(Product product)
+        public async Task<List<ProductDTO>> Get()
         {
-            productRepository.Add(product);
-            await uof.CommitAsync();
-            var prdDto = mapper.Map<ProductDTO>(product);
+            if (productRepository != null)
+            {
+                var prd = await productRepository.Get();
+                var prdDTO = mapper.Map<List<ProductDTO>>(prd);
 
-            return prdDto;
+                return prdDTO;
+            }
+            return null;
         }
 
-        public ProductDTO FindById(int Id)
+        public async Task<ProductDTO> FindById(int Id)
         {
-            if (Id < 1) throw new ArgumentException("id must be positive int");
-            var prd = productRepository.Get().FirstOrDefault(p => p.ProductId == Id);
-            var prdDTO = mapper.Map<ProductDTO>(prd);
+            if (productRepository != null)
+            {
+                if (Id < 1) throw new ArgumentException("id must be positive int");
+                var prd = await productRepository.GetById(Id);
+                var prdDTO = mapper.Map<ProductDTO>(prd);
 
-            return prdDTO;
-        }
-
-        public IQueryable<ProductDTO> Get()
-        {
-            var prd = productRepository.Get().FirstOrDefault(); 
-            var prdDTO = mapper.Map<IQueryable<ProductDTO>>(prd);
-
-            // use 'yield return prdDTO;' in case of using IEnumerable as a returned value
-            return prdDTO;
+                return prdDTO;
+            }
+            return null;
         }
 
         public async Task Remove(int Id)
         {
-            if (Id < 1) throw new ArgumentException("id must be positive int");
-            var prd = productRepository.Get().FirstOrDefault(p => p.ProductId == Id);
-            productRepository.Remove(prd);
+            if (productRepository != null)
+            {
+                if (Id < 1) throw new ArgumentException("id must be positive int");
+                var prd = await productRepository.GetById(Id);
+                await productRepository.Remove(prd);
 
-            await uof.CommitAsync();
+                await uof.CommitAsync();
+            }
+        }
+
+        public async Task<int> Add(Product product)
+        {
+            if (productRepository != null)
+            {
+                await productRepository.Add(product);
+                await uof.CommitAsync();
+                return product.ProductId;
+            }
+            return 0;
         }
 
         public async Task Update(Product product)
         {
-            productRepository.Modify(product);
-            await uof.CommitAsync();
+            if (productRepository != null)
+            {
+                await productRepository.Update(product);
+                await uof.CommitAsync();
+            }
         }
     }
 }
+

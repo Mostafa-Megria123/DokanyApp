@@ -1,46 +1,81 @@
-﻿using System.Linq;
+﻿using AutoMapper;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DokanyApp.BLL
 {
-
-    class OrderService : IOrderService
+    public class OrderService : IOrderService
     {
-        private readonly IRepository<Order> orderRepository;
-        private readonly IUnitOfWork uof;
+        private IRepository<Order> orderRepository;
+        private IUnitOfWork uof;
+        private readonly IMapper mapper;
 
         public OrderService(IRepository<Order> orderRepository,
-            IUnitOfWork uof)
+            IUnitOfWork uof,
+            IMapper mapper)
         {
             this.orderRepository = orderRepository;
             this.uof = uof;
+            this.mapper = mapper;
         }
 
-        public IRepository<Order> OrderRepository { get; }
-
-        public Task Add(Order order)
+        public async Task<List<OrderDTO>> Get()
         {
-            throw new System.NotImplementedException();
+            if (orderRepository != null)
+            {
+                var order = await orderRepository.Get();
+                var orderDTO = mapper.Map<List<OrderDTO>>(order);
+
+                return orderDTO;
+            }
+            return null;
         }
 
-        public Task<Order> FindById(int Id)
+        public async Task<OrderDTO> FindById(int Id)
         {
-            throw new System.NotImplementedException();
+            if (orderRepository != null)
+            {
+                if (Id < 1) throw new ArgumentException("id must be positive int");
+                var order = await orderRepository.GetById(Id);
+                var orderDTO = mapper.Map<OrderDTO>(order);
+
+                return orderDTO;
+            }
+            return null;
         }
 
-        public IQueryable<Order> Get()
+        public async Task Remove(int Id)
         {
-            throw new System.NotImplementedException();
+            if (orderRepository != null)
+            {
+                if (Id < 1) throw new ArgumentException("id must be positive int");
+                var order = await orderRepository.GetById(Id);
+                await orderRepository.Remove(order);
+
+                await uof.CommitAsync();
+            }
         }
 
-        public Task Remove(int Id)
+        public async Task<int> Add(Order order)
         {
-            throw new System.NotImplementedException();
+            if (orderRepository != null)
+            {
+                await orderRepository.Add(order);
+                await uof.CommitAsync();
+                return order.OrderId;
+            }
+            return 0;
         }
 
-        public Task Update(Order order)
+        public async Task Update(Order order)
         {
-            throw new System.NotImplementedException();
+            if (orderRepository != null)
+            {
+                await orderRepository.Update(order);
+                await uof.CommitAsync();
+            }
         }
     }
 }
+

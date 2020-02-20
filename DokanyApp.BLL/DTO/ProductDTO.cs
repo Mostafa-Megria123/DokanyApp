@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DokanyApp.BLL
+﻿namespace DokanyApp.BLL
 {
     public class ProductDTO
     {
@@ -11,6 +9,6 @@ namespace DokanyApp.BLL
         public decimal Price { get; set; }
         public string ImageUrl { get; set; }
         public int CategoryId { get; set; }
-        public DateTime CreationDate { get; set; }
+        public string CreationDate { get; set; }
     }
 }

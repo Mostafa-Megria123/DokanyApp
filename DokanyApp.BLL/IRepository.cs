@@ -1,13 +1,14 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DokanyApp.BLL
 {
     public interface IRepository<T> where T : class
     {
-        IQueryable<T> Get();
-        void Add(T item);
-        void Remove(T item);
-        void Modify(T item);
+        Task<List<T>> Get();
+        Task<T> GetById(int id);
+        Task Remove(T item);
+        Task Add(T item);
+        Task Update(T item);
     }
 }

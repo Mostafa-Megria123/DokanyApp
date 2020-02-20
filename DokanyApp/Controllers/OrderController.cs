@@ -8,15 +8,15 @@ namespace DokanyApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class OrderController : ControllerBase
     {
-        private readonly IProductService productService;
+        private readonly IOrderService orderService;
         private readonly ILoggerManager logger;
 
-        public ProductController(IProductService productService,
+        public OrderController(IOrderService orderService,
             ILoggerManager logger)
         {
-            this.productService = productService ?? throw new ArgumentNullException(nameof(productService));
+            this.orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
             this.logger = logger;
         }
 
@@ -29,7 +29,7 @@ namespace DokanyApp.Controllers
 
             try
             {
-                var data = await productService.Get();
+                var data = await orderService.Get();
                 if (data == null)
                 {
                     return NotFound();
@@ -58,7 +58,7 @@ namespace DokanyApp.Controllers
 
             try
             {
-                var data = await productService.FindById(id);
+                var data = await orderService.FindById(id);
 
                 if (data == null)
                 {
@@ -84,8 +84,8 @@ namespace DokanyApp.Controllers
 
             try
             {
-                await productService.Remove(id);
-                return Ok("Product number " + id + " Removed Successfully");
+                await orderService.Remove(id);
+                return Ok("Order number " + id + " Removed Successfully");
             }
             catch (Exception)
             {
@@ -95,13 +95,13 @@ namespace DokanyApp.Controllers
 
         [HttpPost]
         [Route("AddProduct")]
-        public async Task<IActionResult> CreateProduct([FromBody]Product product)
+        public async Task<IActionResult> CreateProduct([FromBody]Order order)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await productService.Add(product);
+                    await orderService.Add(order);
                     return Ok("Product Was Added Successfully");
                 }
                 catch (Exception)
@@ -114,13 +114,13 @@ namespace DokanyApp.Controllers
 
         [HttpPost]
         [Route("UpdateProduct")]
-        public async Task<IActionResult> UpdateProduct([FromBody]Product product)
+        public async Task<IActionResult> UpdateProduct([FromBody]Order order)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await productService.Update(product);
+                    await orderService.Update(order);
                     return Ok("Product Was Updated Successfully");
                 }
                 catch (Exception ex)

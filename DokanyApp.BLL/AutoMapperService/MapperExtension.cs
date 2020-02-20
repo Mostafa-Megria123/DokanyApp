@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DokanyApp.BLL.AutoMapperService
@@ -16,7 +17,6 @@ namespace DokanyApp.BLL.AutoMapperService
             CreateMap<Category, CategoryDTO>();
             CreateMap<Order, OrderDTO>();
             CreateMap<Product, ProductDTO>();
-            CreateMap<IQueryable<Product>, IQueryable<ProductDTO>>();
 
             CreateMap<User, AdminDTO>()
                 .ForMember(dest => dest.AdminId, act => act.MapFrom(src => src.UserId))

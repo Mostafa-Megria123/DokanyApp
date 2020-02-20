@@ -49,9 +49,10 @@ namespace DokanyApp.Services
         public static void ConfigureDIServices(this IServiceCollection services)
         {
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IOrderService, OrderService>();
             services.AddTransient(typeof(IRepository<>), typeof(EFRepository<>));
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
-            services.AddTransient<EFUnitOfWork, EFUnitOfWork>();
+            services.AddScoped<EFUnitOfWork, EFUnitOfWork>();
             services.AddSingleton<ILoggerManager, LoggerManager>();
         }
 

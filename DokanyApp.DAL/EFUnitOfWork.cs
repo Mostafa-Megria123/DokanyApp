@@ -24,9 +24,8 @@ namespace DokanyApp.DAL
         public virtual DbSet<ShippingInfo> ShippingInfo { get; set; }
         public virtual DbSet<User> User { get; set; }
 
-        public async Task CommitAsync()
-            => await SaveChangesAsync();
-        
+        public async Task CommitAsync() => await SaveChangesAsync();
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -156,8 +155,11 @@ namespace DokanyApp.DAL
                     .IsUnicode(false);
 
                 entity.Property(e => e.CreationDate)
-                    .HasColumnType("datetime")
-                    .HasComputedColumnSql("(getdate())");
+                    //.HasColumnType("datetime");
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
 
                 entity.Property(e => e.Description).IsUnicode(false);
 
