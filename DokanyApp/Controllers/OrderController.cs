@@ -101,7 +101,7 @@ namespace DokanyApp.Controllers
             {
                 try
                 {
-                    await orderService.Add(order);
+                  //  await orderService.Add(order);
                     return Ok("Product Was Added Successfully");
                 }
                 catch (Exception)

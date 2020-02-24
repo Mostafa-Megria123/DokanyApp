@@ -4,14 +4,16 @@ using DokanyApp.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DokanyApp.DAL.Migrations
 {
     [DbContext(typeof(EFUnitOfWork))]
-    partial class EFUnitOfWorkModelSnapshot : ModelSnapshot
+    [Migration("20200224201305_orderservice")]
+    partial class orderservice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
