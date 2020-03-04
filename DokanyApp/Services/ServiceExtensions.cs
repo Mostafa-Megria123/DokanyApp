@@ -48,6 +48,7 @@ namespace DokanyApp.Services
 
         public static void ConfigureDIServices(this IServiceCollection services)
         {
+            services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient(typeof(IRepository<>), typeof(EFRepository<>));
