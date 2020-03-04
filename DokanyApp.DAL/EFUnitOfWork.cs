@@ -22,7 +22,9 @@ namespace DokanyApp.DAL
         public virtual DbSet<OrderDetails> OrderDetails { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ShippingInfo> ShippingInfo { get; set; }
+        public virtual DbSet<ShippingAddress> ShippingAddress { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<CreditCard> CreditCard { get; set; }
 
         public async Task CommitAsync() => await SaveChangesAsync();
 
@@ -84,14 +86,14 @@ namespace DokanyApp.DAL
 
             modelBuilder.Entity<Order>(entity =>
             {
-                entity.HasIndex(e => e.CartItemIid)
-                    .HasName("IX_Order_ShoppingCartIId");
+               entity.HasIndex(e => e.CartItemIId)
+                   .HasName("IX_Order_ShoppingCartIId");
 
                 entity.HasIndex(e => e.CustomerId);
 
                 entity.HasIndex(e => e.ShippingId);
 
-                entity.Property(e => e.CartItemIid).HasColumnName("CartItemIId");
+                entity.Property(e => e.CartItemIId).HasColumnName("CartItemIId");
 
                 entity.Property(e => e.CreationDate).HasColumnType("datetime");
 
@@ -108,7 +110,7 @@ namespace DokanyApp.DAL
 
                 entity.HasOne(d => d.CartItemI)
                     .WithMany(p => p.Order)
-                    .HasForeignKey(d => d.CartItemIid)
+                    .HasForeignKey(d => d.CartItemIId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_CartItem");
 
@@ -128,8 +130,6 @@ namespace DokanyApp.DAL
             modelBuilder.Entity<OrderDetails>(entity =>
             {
                 entity.Property(e => e.OrderDetailsId).ValueGeneratedNever();
-
-                entity.Property(e => e.Total).HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.UnitCost).HasColumnType("decimal(18, 0)");
 
