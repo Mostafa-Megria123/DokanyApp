@@ -1,0 +1,43 @@
+.Step1 p:nth-child(1){
+    font-size: 24px;
+    font-weight: 1;
+}
+.Step1 .secondTitle{
+    font-size: 20px;
+    font-weight: 1;
+}
+.Step1 .shippingAddress,
+.Step1 .phoneNumber,
+.Step1 .name{
+    line-height: 0.3;
+}
+.addressCard,
+.addressCardEmpty{
+    border: 2px solid grey;
+    padding: 20px;
+    border-radius: 10px;
+    line-height: 0.3;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+.addressCardClicked{
+    border: 2px solid red;
+}
+.addressCardEmpty{
+    height: 250px;
+    margin: auto;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.addressCardEmpty span{
+    color: red;
+}
+.addressCard h6,
+.titleOrderStepper,
+.Step1 p:nth-child(1){
+    color: red;
+}
+.newShippingAddress{
+    text-align: center;
+    padding-top: 5rem;
+}

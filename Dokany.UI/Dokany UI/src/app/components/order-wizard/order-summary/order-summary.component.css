@@ -1,0 +1,16 @@
+.orderSummary{
+    background-color: gray;
+    width: 100%;
+    padding: 20px;
+    border-bottom: 2px solid red;
+}
+.summaryTitle{
+    font-size: 25px;
+}
+.total{
+    font-size: 20px;
+    color: red;
+}
+.number{
+    text-align: end;
+}

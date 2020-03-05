@@ -1,0 +1,77 @@
+<ng-wizard [config]="config" (stepChanged)="stepChanged($event)" class="order-stepper">
+  <div class="row">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4">
+      <div class="checkOut">
+        CHECKOUT
+      </div>
+    </div>
+    <div class="col-lg-4"></div>
+  </div>
+  <ng-wizard-step [title]="'Step 1'" [description]="'SHIPPING'">
+    <div class="row">
+      <div class="col-lg-3"></div>
+      <div class="col-lg-6">
+        <order-step1 (OnSelectedShippingAddress)="SetShippingAddress($event)"></order-step1>
+      </div>
+      <div class="col-lg-3"></div>
+    </div>
+  </ng-wizard-step>
+
+  <ng-wizard-step [title]="'Step 2'" [description]="'PAYMENT'">
+    <div class="row">
+      <div class="col-lg-3"></div>
+      <div class="col-lg-6">
+        <order-step2 (OnSelectPaymentType)="SetPaymentType($event)" (OnCreditInfo)="SetCreditInfo($event)">
+        </order-step2>
+      </div>
+      <div class="col-lg-3"></div>
+    </div>
+  </ng-wizard-step>
+
+  <ng-wizard-step [title]="'Step 3'" [description]="'SHIPPING'">
+    <div class="row">
+      <div class="col-lg-3"></div>
+      <div class="col-lg-6">
+        <order-step3 (selectStep)="SetStep($event)" [shippingAddress]="ShippingAddress"
+          [selectPaymentType]="SelectPaymentType"></order-step3>
+      </div>
+      <div class="col-lg-3"></div>
+    </div>
+  </ng-wizard-step>
+
+  <ng-wizard-step>
+    <div class="row">
+      <div class="col-lg-3"></div>
+      <div class="col-lg-6">
+        <last-step></last-step>
+      </div>
+      <div class="col-lg-3"></div>
+    </div>
+  </ng-wizard-step>
+</ng-wizard>
+
+<div class="row" id="orderSummaryContainer">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6">
+    <order-summary></order-summary>
+  </div>
+  <div class="col-lg-3"></div>
+</div>
+
+<br>
+<br>
+<div class="row">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6">
+    <div class="btnNext" *ngIf="!IsLastStep" id="btnNextWizard" (click)="showNextStep($event)">
+    </div>
+    <div class="btnNext" *ngIf="IsLastStep" id="btnNextWizard" (click)="ShowMyOrders()">MY ORDERS
+    </div>
+
+    <br>
+    <div class="contShopping" *ngIf='!IsLastStep' id="btnPrevWizard" (click)="showPreviousStep($event)"></div>
+    <div class="contShopping" *ngIf='IsLastStep' id="btnPrevWizard" (click)="ContinueShopping()">CONTINUE
+      SHOPPING</div>
+
+  </div>

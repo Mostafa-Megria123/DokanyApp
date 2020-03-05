@@ -1,0 +1,104 @@
+<div>
+    <form [formGroup]="productForm">
+        <div class="form-group row">
+            <div class="col-lg-2 col-md-3 col-sm-12">
+                <label for="productName">Product Name : </label>
+            </div>
+            <div class="col-lg-8 col-md-6 col-sm-12">
+                <input type="text" name="productName" placeholder="Product Name" formControlName="productName"
+                    class="form-control" required>
+                <div class="alert alert-danger"
+                    *ngIf="!productForm.controls.productName?.valid && (productForm.controls.productName?.dirty || productForm.controls.productName?.touched)">
+                    Please Enter Product Name
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-lg-2 col-md-3 col-sm-12">
+                <label for="quantity">Product Quantity : </label>
+            </div>
+            <div class="col-lg-8 col-md-6 col-sm-12">
+                <input type="number" name="quantity" placeholder=" Product Quantity" formControlName="quantity"
+                    class="form-control" required>
+                <div class="alert alert-danger"
+                    *ngIf="!productForm.controls.quantity?.valid && (productForm.controls.quantity?.dirty || productForm.controls.quantity?.touched)">
+                    Please Enter Product Quantity
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-lg-2 col-md-3 col-sm-12">
+                <label for="price">Product Price : </label>
+            </div>
+            <div class="col-lg-8 col-md-6 col-sm-12">
+                <input type="number" name="price" placeholder="Product Price" formControlName="price"
+                    class="form-control" required>
+                <div class="alert alert-danger"
+                    *ngIf="!productForm.controls.price?.valid && (productForm.controls.price?.dirty || productForm.controls.price?.touched)">
+                    Please Enter Product Price
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-lg-2 col-md-3 col-sm-12">
+                <label for="category">Category : </label>
+            </div>
+            <div class="col-lg-8 col-md-6 col-sm-12">
+                <select name="category" class="form-control" formControlName="category" required>
+                    <option value="0" [selected]="true">Select Product Category</option>
+                    <option *ngFor="let cat of categories;" [value]="cat.Name">{{ cat.Name }}</option>
+                </select>
+                <div class="alert alert-danger"
+                    *ngIf="!productForm.controls.category?.valid && (productForm.controls.category?.dirty || productForm.controls.category?.touched)">
+                    Please Enter Product Category
+                </div>
+            </div>
+        </div>
+
+        <!-- upload image -->
+        
+
+        <div class="form-group row">
+            <div class="col-lg-2 col-md-3 col-sm-12">
+                <label for="detail">Upload Image : </label>
+            </div>
+            <div class="col-lg-8 col-md-6 col-sm-12">
+                <div class="row" style="margin-bottom:15px;">
+
+                    <div class="col-md-3">
+                        <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)"
+                            style="display:none;" multiple>
+                        <button type="button" class="btn btn-success" (click)="file.click()">Upload File</button>
+                    </div>
+                    <div class="col-md-4">
+                        <span class="upload" *ngIf="progress > 0">
+                            {{progress}}
+                        </span>
+                        <span class="upload" *ngIf="message">
+                            {{message}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-lg-2 col-md-3 col-sm-12">
+                <label for="detail">Product Details : </label>
+            </div>
+            <div class="col-lg-8 col-md-6 col-sm-12">
+                <textarea name="detail" formControlName="detail" class="form-control" cols="30" rows="6"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group row product-btns">
+            <div class="col-lg-2 col-md-3 col-sm-6 col-6">
+                <button class="btn btn-primary col-12" routerLink="../">Cancel</button>
+            </div>
+            <div class="col-lg-2 col-md-6 col-sm-6 col-6">
+                <input type="submit" value="Save" (click)="OnSubmit()" class="btn btn-success col-12"
+                    [disabled]='!productForm.valid'>
+            </div>
+        </div>
+    </form>
+</div>

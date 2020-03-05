@@ -1,0 +1,37 @@
+<div class="home">
+
+    <div class="col-md-3 col-3 pageTwo-style bg-color leftNavBar">
+        <div>
+            <div class="pageTwo-title">
+                Admin
+            </div>
+            <div>
+                <ul class="pageTwo-list">
+                    <li><a class="category-content-item bg-color" routerLink="/home/product">
+                            product
+                        </a></li>
+                    <li><a class="category-content-item bg-color" routerLink="/home/categories">
+                            category
+                        </a></li>
+                    <li><a class="category-content-item bg-color" routerLink="/home/order">order</a></li>
+                </ul>
+                <!-- <ul class="pageTwo-list">
+          <li><a class="category-content-item-title bg-color title">
+            product
+            <ul>
+              <li><a class="category-content-item bg-color" routerLink="/home/product/add-new">add new</a></li>
+              <li><a class="category-content-item bg-color" routerLink="/home/product/manage">manage</a></li>
+            </ul>
+          </a></li>
+          <li><a class="category-content-item bg-color" routerLink="/home/order">order</a></li>
+          
+        </ul> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9 col-9 pageTwo-style content">
+        <router-outlet></router-outlet>
+    </div>
+
+</div>

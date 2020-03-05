@@ -1,0 +1,83 @@
+<div class="Step1">
+    <p>1<sup>/3</sup> Shipping Method & Address</p>
+    <p class="secondTitle">SHIPPING ADDRESS</p>
+    <div *ngIf="!IsAddingNewAddress">
+        <div class="addressCard" id="addressCard{{item.id}}" *ngFor='let item of ShppingAddresses;'
+            (click)="OnSelectAddress(item.id)">
+            <div class="name">
+                <h6>Name</h6>
+                <p>{{item.firstName}} {{item.lastName}}</p>
+            </div>
+            <br>
+            <div class="phoneNumber">
+                <h6>PHONE NUMBER</h6>
+                <p>{{item.phoneNumber}}</p>
+            </div>
+            <br>
+            <div class="shippingAddress">
+                <h6>SHIPPING ADDRESS</h6>
+                <p>{{item.addressLine1}}</p>
+                <p>{{item.addressLine2}}</p>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!IsAddingNewAddress" class="addressCardEmpty align-self-center" id="addressEmpty" (click)="OnAddNewShippingAddress()">
+        <div class="newShippingAddress" >
+            <p>+</p>
+            <p>add new address</p>
+        </div>
+    </div>
+
+    <div class="addNewShippingAddressContainer" *ngIf="IsAddingNewAddress">
+        <br>
+        <form [formGroup]="registerShippingAddress">
+            <div class="form-group">
+                <input type="text" class="form-control rounded-pill" name="firstName" formControlName="firstName"
+                    placeholder="FIRST NAME">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control rounded-pill" name="lastName" formControlName="lastName"
+                    placeholder="LAST NAME">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control rounded-pill" name="addressLine1" formControlName="addressLine1"
+                    placeholder="ADDRESS LINE 1">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control rounded-pill" name="addressLine2" formControlName="addressLine2"
+                    placeholder="ADDRESS LINE 2">
+            </div>
+            <div class="form-group">
+                <input type="number" class="form-control rounded-pill" name="zipCode" formControlName="zipCode"
+                    placeholder="ZIP CODE">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control rounded-pill" name="city" formControlName="city"
+                    placeholder="CITY">
+            </div>
+            <div class="form-group">
+                <select name="country" class="form-control rounded-pill text-secondary" name="country" formControlName="country">
+                    <option value="-1" disabled>COUNTRY</option>
+                    <option value="0">A</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control rounded-pill" name="STATE" formControlName="state"
+                    placeholder="STATE">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control rounded-pill" name="phone" formControlName="phone"
+                    placeholder="PHONE">
+            </div>
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="useAsShippingAddress"
+                        formControlName="useAsShippingAddress" (change)="OnUseNewShippingAddress()">
+                    <label class="form-check-label" for="gridCheck">
+                        USE THE SAME ADDRESS AS SHIPPING ADDRESS
+                    </label>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

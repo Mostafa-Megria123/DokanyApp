@@ -1,0 +1,18 @@
+.Step3 p:nth-child(1){
+    font-size: 24px;
+    color: red;
+    font-weight: 1;
+}
+.Step3 .secondTitle{
+    font-size: 20px;
+    font-weight: 1;
+}
+.Step3 .shippingAddress,
+.Step3 .phoneNumber,
+.Step3 .name{
+    line-height: 0.3;
+}
+.addressCard h6,
+.titleOrderStepper{
+    color: red;
+}

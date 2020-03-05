@@ -1,0 +1,50 @@
+/* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~ng-wizard/themes/ng_wizard.min.css';
+@import '~ng-wizard/themes/ng_wizard_theme_circles.min.css';
+
+
+html {
+    height: 100%;
+  }
+
+body{
+    height: 100%; 
+}
+a{
+    text-decoration: none !important;
+}
+ul{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+li{
+    list-style-type: none;;
+}
+
+/* Hide buttons of wizard order */
+.ng-wizard-btn-prev,
+.ng-wizard-btn-next{
+    display: none;
+}
+
+
+.col-5{
+    width: 5%;
+}
+.col-10{
+    width: 10%;
+}
+.col-20{
+    width: 20%;
+}
+.col-30{
+    width: 30%;
+}
+.col-40{
+    width: 40%;
+}
+.col-50{
+    width: 50%;
+}

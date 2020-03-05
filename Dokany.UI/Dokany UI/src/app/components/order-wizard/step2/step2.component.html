@@ -1,0 +1,65 @@
+<div class="Step2">
+    <p>2<sup>/3</sup> Payment Method</p>
+    <p class="secondTitle">CHOOSE A PAYMENT METHOD</p>
+    <div class="row">
+        <div class="cartCredit" id="credit" data-toggle="modal" data-target="#myModal"
+            (click)="OnPaymentType('credit')">
+            CREDIT CARD
+        </div>
+        <div class="cartCredit" id="cash" style="margin-left: 5%;" (click)="OnPaymentType('cash')">
+            CASH ON DELIVERY
+        </div>
+    </div>
+    <div class="restriction">
+        <span>If you select cash on delivery, you can pay for your package when our delivery associates bring it to your
+            door step or when you pick it up at one of our pickup stations.</span>
+        <ul>
+            <li>We only accept Egyption Pound.</li>
+            <li>The maximum order value for Cash on Delivery is (EGP 25.000) in Egypt.</li>
+            <li>Only cash payments will be accepted. Any other paymeny methods like personal cheques or credit cards
+                will not be accepted: therefore you willnot be able to receive your shipment.</li>
+            <li>Because our Delivery Agents do not handle petty cash, we would appreciate that you have the exact amount
+                for paymeny.</li>
+            <li>Not accepting an order or not being able to make a full payment at time of delivery may result in loss
+                of cash on delivery buying priviledge at Aldokanstores.com.</li>
+            <li>Cash on delivery may not be available due to frequent past order cancellation.</li>
+            <li>Please note there is a non-refundable fee of EGP 10.00 for put cash on delivery services.</li>
+        </ul>
+    </div>
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="background-color: black;">
+            <div class="modal-body">
+                <Label>Card Name</Label>
+                <div class="row">
+                    <div class="col-10">
+                        <input type="text" class="form-control" (change)="OnCreditInfoChanged()" [(ngModel)]='cardName' name="cardName" placeholder="Card Name">
+                    </div>
+                    <div class="col-2">
+                        <label>VISA</label>
+                    </div>
+                </div>
+                <Label>Card Number</Label>
+                <input type="text" class="form-control" (change)="OnCreditInfoChanged()" [(ngModel)]='cardNumber' name="cardNumber" placeholder="0000 - 0000 - 0000 - 0000">
+                <div class="row">
+                    <div class="col-2">
+                        <Label>Month</Label>
+                        <input type="text" class="form-control" (change)="OnCreditInfoChanged()" [(ngModel)]='month' name="month" placeholder="00">
+                    </div>
+                    <div class="col-2">
+                        <Label>Year</Label>
+                        <input type="text" class="form-control" (change)="OnCreditInfoChanged()" [(ngModel)]='year' name="year" placeholder="00">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

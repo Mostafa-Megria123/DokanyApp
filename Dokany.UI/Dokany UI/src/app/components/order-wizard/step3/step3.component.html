@@ -1,0 +1,34 @@
+<div class="Step3">
+    <p>3<sup>/3</sup>Review</p>
+    <p class="secondTitle">SGIPPING & BILLING INFO <span style="color: crimson; cursor: pointer;"
+            (click)="OnEditShippingAddress(2)">Edit</span></p>
+
+    <div class="addressCard">
+        <div class="name">
+            <h6>Name</h6>
+            <p>{{shippingAddress?.firstName}} {{shippingAddress?.lastName}}</p>
+        </div>
+        <br>
+        <div class="phoneNumber">
+            <h6>PHONE NUMBER</h6>
+            <p>{{shippingAddress?.phoneNumber}}</p>
+        </div>
+        <br>
+        <div class="shippingAddress">
+            <h6>SHIPPING ADDRESS</h6>
+            <p>{{shippingAddress?.addressLine1}}</p>
+            <p>{{shippingAddress?.addressLine2}}</p>
+        </div>
+    </div>
+    <hr>
+    <p class="secondTitle">PAYMENT METHOD <span style="color: crimson; cursor: pointer;"
+            (click)="OnEditShippingAddress(1)">Edit</span></p>
+    <div class="addressCard">
+        <div class="name">
+            <h6>YOUR CHOOSE</h6>
+            <p>{{ selectPaymentType }}</p>
+        </div>
+    </div>
+    <br>
+    <br>
+</div>
