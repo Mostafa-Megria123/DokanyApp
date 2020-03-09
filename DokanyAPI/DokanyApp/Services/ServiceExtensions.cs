@@ -1,4 +1,6 @@
 ﻿using DokanyApp.BLL;
+using DokanyApp.BLL.Interfaces;
+using DokanyApp.BLL.Services;
 using DokanyApp.DAL;
 using DokanyApp.LoggingService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -50,6 +52,9 @@ namespace DokanyApp.Services
         {
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IShippingAddressService, ShippingAddressService>();
+            services.AddTransient<ICartItemService, CartItemService>();
+            services.AddTransient<ICreditCardService, CreditCardService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient(typeof(IRepository<>), typeof(EFRepository<>));
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();

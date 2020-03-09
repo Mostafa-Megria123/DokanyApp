@@ -45,7 +45,7 @@ namespace DokanyApp.DAL
 
         public async Task Update(T item)
         {
-            dbContext.Update(item);
+            dbContext.Attach(item);
             dbContext.Entry(item).State = EntityState.Modified;
 
             await dbContext.CommitAsync();

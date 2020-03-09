@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { NoopAnimationsModule} from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,6 +21,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LayoutComponent } from './components/shared/layout/layout.component';
 import { StepperComponent } from './components/order-wizard/stepper/stepper.component';
 import { LeftNavbarComponent } from './shared/left-navbar/left-navbar.component';
+import { FormOrderComponent } from './components/order/form-order/form-order.component';
+import { OrderListComponent } from './components/order/order-list/order-list.component';
 
 const ngWizardConfig: NgWizardConfig = {
   theme: THEME.circles
@@ -39,7 +43,9 @@ const ngWizardConfig: NgWizardConfig = {
     NavComponent,
     LayoutComponent,
     StepperComponent,
-    LeftNavbarComponent
+    LeftNavbarComponent,
+    FormOrderComponent,
+    OrderListComponent
   ],
   imports: [
     BrowserModule,
@@ -47,9 +53,15 @@ const ngWizardConfig: NgWizardConfig = {
     ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
+    NoopAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 1000,
+      positionClass: 'toast-bottom-right',
+    }),
     NgWizardModule.forRoot(ngWizardConfig)
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

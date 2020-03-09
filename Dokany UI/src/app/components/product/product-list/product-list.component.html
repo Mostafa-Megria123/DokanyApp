@@ -8,25 +8,33 @@
 
   <table class="table table-bordered">
     <tr>
-      <th class="">Id</th>
-      <th class="">Name</th>
-      <th class="">Quantity</th>
-      <th class="">Price</th>
-      <th class="">Category</th>
+      <th class="col-5">Id</th>
+      <th class="col-15">Image</th>
+      <th class="col-20">Name</th>
+      <th class="col-20">Brand Name</th>
+      <th class="col-5">Price</th>
+      <th class="col-5">Quantity</th>
+      <th class="col-5">Category</th>
+      <th class="col-20">Creation Date</th>
       <th colspan="3" style="text-align: center;">Management</th>
     </tr>
     <tr *ngFor="let product of prodcuts">
-      <td>{{ product.Id }}</td>
-      <td>{{ product.Name }}</td>
-      <td>{{ product.Quantity }}</td>
-      <td>{{ product.Price }}</td>
-      <td>{{ product.Category }}</td>
-      <td><a [routerLink]="['/home/product' , product.Id]" class="btn btn-info text-light">Edit</a></td>
+      <td>{{ product.productId }}</td>
+      <td><img [src]='getImage(product.imageUrl)' alt="Category Image" width="100" height="100"></td>
+      <td>{{ product.productName }}</td>
+      <td>{{ product.brandName }}</td>
+      <td>{{ product.price }}</td>
+      <td>{{ product.quantity }}</td>
+      <td>{{ getCategoryName(product.categoryId) }}</td>
+      <td>{{ product.creationDate }}</td>
+
+      <td><a [routerLink]="['/home/product' , product.productId]" class="btn btn-info text-light">Edit</a></td>
       <td><a class="btn btn-primary text-light" data-toggle="modal" data-target="#modalDetail">Detail</a></td>
       <td><a class="btn btn-danger text-light" data-toggle="modal" data-target="#exampleModal"
-          (click)="OnSetIdForDelete(product.Id)">Delete</a></td>
+          (click)="OnSetIdForDelete(product.productId)">Delete</a></td>
     </tr>
   </table>
+
 
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

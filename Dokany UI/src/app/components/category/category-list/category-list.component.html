@@ -5,21 +5,23 @@
 <br />
 <br />
 
-<table class="table table-bordered">
+<table class="table table-bordered" > 
     <tr>
         <th class="col-5">Id</th>
+        <th class="col-10">Image</th>
         <th>Name</th>
+        <th>Description</th>
         <th colspan="3" class="col-10" style="text-align: center;">Management</th>
     </tr>
     <tr *ngFor="let category of categories">
-        <td>{{ category.Id }}</td>
-        <td>{{ category.Name }}</td>
-        <td><a [routerLink]="['/home/category' , category.Id]" class="btn btn-info text-light">Edit</a></td>
-        <td><a class="btn btn-primary text-light" data-toggle="modal" data-target="#modalDetail">Detail</a></td>
-        <td><a class="btn btn-danger text-light" data-toggle="modal" data-target="#exampleModal" (click)="OnSetIdForDelete(category.Id)">Delete</a></td>
+        <td>{{ category.categoryId }}</td>
+        <td><img [src]='getImage(category.imagePath)' alt="Category Image" width="100" height="100"></td>
+        <td>{{ category.categoryName }}</td>
+        <td>{{ category.description }}</td>
+        <td><a [routerLink]="['/home/category' , category.categoryId]" class="btn btn-info text-light">Edit</a></td>
+        <td><a class="btn btn-danger text-light" data-toggle="modal" data-target="#exampleModal" (click)="OnSetIdForDelete(category.categoryId)">Delete</a></td>
     </tr> 
 </table>
-
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -39,24 +41,7 @@
         </div>
       </div>
     </div>
+
+
   </div>
 
-    <!-- Modal Details-->
-    <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Category Detail</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              ...
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div>

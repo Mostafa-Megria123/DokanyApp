@@ -1,5 +1,5 @@
-<div >
-    <form [formGroup]="formCategory" >
+<div>
+    <form [formGroup]="formCategory">
         <div class="form-group row">
             <div class="col-lg-2 col-md-3 col-sm-12">
                 <label for="categoryName">Category Name : </label>
@@ -14,12 +14,50 @@
             </div>
         </div>
 
+        <div class="form-group row">
+            <div class="col-lg-2 col-md-3 col-sm-12">
+                <label for="categoryDescription">Category Description : </label>
+            </div>
+            <div class="col-lg-8 col-md-6 col-sm-12">
+                <textarea class="form-control" name="categoryDescription" placeholder="Category Description"
+                    formControlName="categoryDescription"></textarea>
+                <div class="alert alert-danger"
+                    *ngIf="!formCategory.controls.categoryDescription?.valid && (formCategory.controls.categoryDescription?.dirty || formCategory.controls.categoryDescription?.touched)">
+                    Please Enter Category Name
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-lg-2 col-md-3 col-sm-12">
+                <label for="categoryImage">Category Image : </label>
+            </div>
+            <div class="col-lg-8 col-md-6 col-sm-12">
+                <div class="row" style="margin-bottom:15px;">
+
+                    <div class="col-md-3">
+                        <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)"
+                            style="display:none;">
+                        <button type="button" class="btn btn-success" (click)="file.click()">Upload File</button>
+                    </div>
+                    <div class="col-md-4">
+                        <span class="upload" *ngIf="progress > 0">
+                            {{progress}}
+                        </span>
+                        <span class="upload" *ngIf="message">
+                            {{message}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="form-group row categoty-btns">
             <div class="col-lg-2 col-md-3 col-sm-6 col-6">
                 <button class="btn btn-primary col-12" routerLink="/home/categories">Cancel</button>
             </div>
             <div class="col-lg-2 col-md-6 col-sm-6 col-6">
-                <input type="submit" value="Save" (click)="OnSubmit()" class="btn btn-success col-12" [disabled]='!formCategory.valid'>
+                <input type="submit" value="Save" (click)="OnSubmit()" class="btn btn-success col-12"
+                    [disabled]="!formCategory.valid">
             </div>
         </div>
     </form>

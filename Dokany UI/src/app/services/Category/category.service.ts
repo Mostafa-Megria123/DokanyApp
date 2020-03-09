@@ -1,37 +1,40 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Category } from 'src/app/models/Category';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
+  url = 'http://localhost:53847/';
+  constructor(private _http: HttpClient) { }
 
-  constructor() { }
-
-  categories: Category[] = [
-   new Category(1 , 'Labtop')
-  ];
-
-  getAll(): Observable<Category[]>{
-    return of(this.categories);
+  getAll() {
+    return this._http.get(this.url + 'api/Category');
   }
 
-  get(CategoryId: Number): Observable<Category>{
-    return of(this.categories.find(p => p.Id == CategoryId));
+  get(CategoryId: Number) {
+    return this._http.get(this.url + 'api/Category/' + CategoryId);
   }
 
-  add(Category: Category){
-    this.categories.push(Category);
+  add(category: Category) {
+    return this._http.post(this.url + 'api/Category/AddCategory', category);
   }
 
   update(CategoryId: Number , Category: Category){
-    let category = this.categories.find(p => p.Id == CategoryId);
-    category.Name = Category.Name;
+    return this._http.post(this.url + 'api/Category/UpdateCategory' , Category);
   }
 
-  delete(CategoryId: Number){
-    let index = this.categories.findIndex(p => p.Id == CategoryId);
-    this.categories.splice(index , 1 );
+  delete(CategoryId: Number) {
+    return this._http.delete(this.url + 'api/Category?id=' + CategoryId);
+  }
+
+  UploadImage(formData: FormData) {
+    return this._http.post(this.url + 'api/upload', formData, { reportProgress: true, observe: 'events' });
+  }
+
+  LoadImage(imagePath) {
+    return this.url + "api/Upload?imagePath=" + imagePath;
   }
 }

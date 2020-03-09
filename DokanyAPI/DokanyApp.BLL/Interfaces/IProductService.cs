@@ -8,7 +8,7 @@ namespace DokanyApp.BLL
         Task<List<ProductDTO>> Get();
         Task<ProductDTO> FindById(int Id);
         Task Remove(int Id);
-        Task<int> Add(Product product);
+        Task<int> Add(Product product, string[] imagesUrl = null);
         Task Update(Product product);
     }
 }

@@ -1,44 +1,41 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Product } from 'src/app/models/Product';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  constructor() { }
+  url = 'http://localhost:53847/';
+  constructor(private _http: HttpClient) { }
 
-  products: Product[] = [
-    new Product(1 , 'product 1' , 2 , 100 , 'Mobile' , 'details' , null , null)
-  ];
-
-  getAll(): Observable<Product[]>{
-    return of(this.products);
+  getAll(){
+    return this._http.get(this.url + 'api/Product');
   }
 
-  get(productId: Number): Observable<Product>{
-    return of(this.products.find(p => p.Id == productId));
+  get(productId: Number){
+    return this._http.get(this.url + 'api/Product/' + productId);  
   }
 
   add(product: Product){
-    this.products.push(product);
+    return this._http.post(this.url + 'api/Product/AddProduct' , product);
   }
 
-  update(productId: Number , product: Product){
-    let prod = this.products.find(p => p.Id == productId);
-    prod.Name = product.Name;
-    prod.Price = product.Price;
-    prod.Category = product.Category;
+  UploadImage(formData: FormData) {
+    return this._http.post(this.url + 'api/upload', formData, { reportProgress: true, observe: 'events' });
+  }
+  update(product: Product){
+    return this._http.post(this.url + 'api/Product/UpdateProduct' , product);
   }
 
   delete(productId: Number){
-    let index = this.products.findIndex(p => p.Id == productId);
-    this.products.splice(index , 1 );
+    return this._http.delete(this.url + 'api/Product?id=' + productId);
   }
 
-  count(): Number{
-    return this.products.length;
+  LoadImage(imageUrl){
+    return this.url + "api/Upload?imagePath=" + imageUrl;
   }
 
 }

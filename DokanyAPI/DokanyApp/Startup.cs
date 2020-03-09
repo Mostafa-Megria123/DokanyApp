@@ -79,6 +79,7 @@ namespace DokanyApp
                 //Options.RoutePrefix = string.Empty;
             });
 
+            app.UseCors("CorsPolicy");
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMiddleware<TokenManagerMiddleware>();

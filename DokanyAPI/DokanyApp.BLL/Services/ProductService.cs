@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DokanyApp.BLL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,14 +9,17 @@ namespace DokanyApp.BLL
     public class ProductService : IProductService
     {
         private IRepository<Product> productRepository;
+        private IRepository<ImageProduct> _imageProductRepository;
         private IUnitOfWork uof;
         private readonly IMapper mapper;
 
         public ProductService(IRepository<Product> productRepository,
+            IRepository<ImageProduct> imageProductRepository,
             IUnitOfWork uof,
             IMapper mapper)
         {
             this.productRepository = productRepository;
+            _imageProductRepository = imageProductRepository;
             this.uof = uof;
             this.mapper = mapper;
         }
@@ -57,11 +61,16 @@ namespace DokanyApp.BLL
             }
         }
 
-        public async Task<int> Add(Product product)
+        public async Task<int> Add(Product product , string[] imagesUrl = null)
         {
             if (productRepository != null)
             {
                 await productRepository.Add(product);
+                if (imagesUrl != null)
+                    foreach (var imagePath in imagesUrl)
+                    {
+                        _imageProductRepository.Add(new ImageProduct { ImagePath = imagePath, ProductId = product.ProductId });
+                    }
                 await uof.CommitAsync();
                 return product.ProductId;
             }

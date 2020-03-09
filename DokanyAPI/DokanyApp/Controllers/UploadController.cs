@@ -47,5 +47,42 @@ namespace DokanyApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        [HttpGet]
+        public IActionResult Get(string imagePath = null)
+        {
+            try
+            {
+                if (imagePath != null || imagePath != "null")
+                {
+                    Byte[] b = System.IO.File.ReadAllBytes(imagePath);
+                    string mimeType = GetContentType(imagePath);
+                    return File(b, mimeType);
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest();
+            }
+        }
+
+        private string GetContentType(string fname)
+        {
+            string contentType = "application/octet-stream";
+            try
+            {
+                // get the registry classes root
+                Microsoft.Win32.RegistryKey classes = Microsoft.Win32.Registry.ClassesRoot;
+
+                // find the sub key based on the file extension
+                Microsoft.Win32.RegistryKey fileClass = classes.OpenSubKey(Path.GetExtension(fname));
+                contentType = fileClass.GetValue("Content Type").ToString();
+            }
+            catch { }
+
+            return contentType;
+        }
     }
 }

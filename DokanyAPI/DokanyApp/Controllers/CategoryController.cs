@@ -1,5 +1,6 @@
 ﻿using DokanyApp.BLL;
 using DokanyApp.LoggingService;
+using DokanyApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -10,8 +11,6 @@ namespace DokanyApp.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-
-
         private readonly ICategoryService categoryService;
         private readonly ILoggerManager logger;
 
@@ -25,10 +24,6 @@ namespace DokanyApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            logger.LogInfo("Here is info message from the Eslaaaam.");
-            logger.LogDebug("Here is debug message from the Megria.");
-            logger.LogError("Here is debug message from the Dola.");
-
             try
             {
                 var data = await categoryService.Get();
@@ -36,10 +31,12 @@ namespace DokanyApp.Controllers
                 {
                     return NotFound();
                 }
+                logger.LogInfo("Retreive all categories.");
                 return Ok(data);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError("Error happens for retreive all categories" + ex.Message);
                 return BadRequest();
             }
         }
@@ -48,12 +45,7 @@ namespace DokanyApp.Controllers
         [Route("{id}")]
         public async Task<IActionResult> FindById(int id)
         {
-            logger.LogInfo("Here is info message from the Eslaaaam.");
-            logger.LogError("Here is debug message from the Dola.");
-
-#pragma warning disable CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
             if (id == null)
-#pragma warning restore CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
             {
                 return BadRequest();
             }
@@ -61,15 +53,17 @@ namespace DokanyApp.Controllers
             try
             {
                 var data = await categoryService.FindById(id);
-
+                logger.LogInfo($"Retreive Category for id {id}");
                 if (data == null)
                 {
                     return NotFound();
                 }
                 return Ok(data);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError($"Error happens for retreive category of {id}" + ex.Message);
+
                 return BadRequest();
             }
         }
@@ -77,36 +71,37 @@ namespace DokanyApp.Controllers
         [HttpDelete]
         public async Task<IActionResult> RemovePrdById(int id)
         {
-#pragma warning disable CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
             if (id == null)
-#pragma warning restore CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
             {
                 return BadRequest();
             }
-
             try
             {
                 await categoryService.Remove(id);
-                return Ok("Category number " + id + " Removed Successfully");
+                logger.LogInfo($"Category of {id} is deleted");
+                return Ok();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError($"Error happens when remove category {id}");
                 return BadRequest();
             }
         }
 
         [HttpPost]
         [Route("AddCategory")]
-        public async Task<IActionResult> CreateCategory([FromBody]Category category)
+        public async Task<IActionResult> CreateCategory([FromBody] CategoryViewModel category)
         {
+
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await categoryService.Add(category);
+                    await categoryService.Add(new Category { CategoryName = category.Name, Description = category.Description , ImagePath = category.ImagePath});
+                    logger.LogInfo("New Category Added");
                     return Ok("Category Was Added Successfully");
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     return BadRequest();
                 }
@@ -116,14 +111,14 @@ namespace DokanyApp.Controllers
 
         [HttpPost]
         [Route("UpdateCategory")]
-        public async Task<IActionResult> UpdateCatgory([FromBody]Category category)
+        public async Task<IActionResult> UpdateCatgory([FromBody]CategoryViewModel category)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await categoryService.Update(category);
-                    return Ok("Category Was Updated Successfully");
+                     await categoryService.Update(new Category { CategoryId = category.Id, CategoryName = category.Name, Description = category.Description, ImagePath = category.ImagePath });
+                    return Ok();
                 }
                 catch (Exception ex)
                 {

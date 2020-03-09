@@ -1,5 +1,6 @@
 ﻿using DokanyApp.BLL;
 using DokanyApp.LoggingService;
+using DokanyApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -23,10 +24,6 @@ namespace DokanyApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            logger.LogInfo("Here is info message from the Eslaaaam.");
-            logger.LogDebug("Here is debug message from the Megria.");
-            logger.LogError("Here is debug message from the Dola.");
-
             try
             {
                 var data = await productService.Get();
@@ -36,8 +33,9 @@ namespace DokanyApp.Controllers
                 }
                 return Ok(data);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError($"Some error happen for retreiving products {ex.Message}");
                 return BadRequest();
             }
         }
@@ -46,12 +44,7 @@ namespace DokanyApp.Controllers
         [Route("{id}")]
         public async Task<IActionResult> FindById(int id)
         {
-            logger.LogInfo("Here is info message from the Eslaaaam.");
-            logger.LogError("Here is debug message from the Dola.");
-
-#pragma warning disable CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
             if (id == null)
-#pragma warning restore CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
             {
                 return BadRequest();
             }
@@ -75,37 +68,52 @@ namespace DokanyApp.Controllers
         [HttpDelete]
         public async Task<IActionResult> RemovePrdById(int id)
         {
-#pragma warning disable CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
             if (id == null)
-#pragma warning restore CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
             {
+                logger.LogError($"Removed product with {id}");
                 return BadRequest();
             }
 
             try
             {
                 await productService.Remove(id);
-                return Ok("Product number " + id + " Removed Successfully");
+                logger.LogInfo("Product number " + id + " Removed Successfully");
+                return Ok();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError($"Error happened to remove product {ex.Message}");
                 return BadRequest();
             }
         }
 
         [HttpPost]
         [Route("AddProduct")]
-        public async Task<IActionResult> CreateProduct([FromBody]Product product)
+        public async Task<IActionResult> CreateProduct([FromBody]ProductViewModel product)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await productService.Add(product);
-                    return Ok("Product Was Added Successfully");
+                    await productService.Add(new Product
+                    {
+                        BrandName = product.BrandName,
+                        CategoryId = product.Category,
+                        Description = product.Description,
+                        ProductName = product.Name,
+                        Quantity = product.Quantity,
+                        Price = product.Price,
+                        ImageUrl = product.ImagePaths[0],
+                        CreationDate = DateTime.Now.ToString(),
+                        ProductAppreciate = ProductAppreciateENU.Like
+                    } , product.ImagePaths);
+
+                    return Ok();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    logger.LogError($"Error happened to add product {ex.Message}");
+
                     return BadRequest();
                 }
             }
@@ -114,14 +122,26 @@ namespace DokanyApp.Controllers
 
         [HttpPost]
         [Route("UpdateProduct")]
-        public async Task<IActionResult> UpdateProduct([FromBody]Product product)
+        public async Task<IActionResult> UpdateProduct([FromBody]ProductViewModel product)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await productService.Update(product);
-                    return Ok("Product Was Updated Successfully");
+                    await productService.Update(new Product
+                    {
+                        ProductId = product.Id,
+                        BrandName = product.BrandName,
+                        CategoryId = product.Category,
+                        Description = product.Description,
+                        ProductName = product.Name,
+                        Quantity = product.Quantity,
+                        Price = product.Price,
+                        ImageUrl = product.ImagePaths[0],
+                        CreationDate = DateTime.Now.ToString(),
+                        ProductAppreciate = ProductAppreciateENU.Like
+                    });
+                    return Ok();
                 }
                 catch (Exception ex)
                 {
@@ -129,6 +149,8 @@ namespace DokanyApp.Controllers
                     {
                         return NotFound();
                     }
+                    logger.LogError($"Error happened to update product {ex.Message}");
+
                     return BadRequest();
                 }
             }

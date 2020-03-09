@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DokanyApp.BLL;
+using DokanyApp.BLL.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DokanyApp.DAL
@@ -25,6 +26,8 @@ namespace DokanyApp.DAL
         public virtual DbSet<ShippingAddress> ShippingAddress { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<CreditCard> CreditCard { get; set; }
+        public virtual DbSet<ImageProduct> ImageProduct { get; set; }
+
 
         public async Task CommitAsync() => await SaveChangesAsync();
 
@@ -74,11 +77,6 @@ namespace DokanyApp.DAL
             modelBuilder.Entity<Category>(entity =>
             {
                 entity.Property(e => e.CategoryName)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);

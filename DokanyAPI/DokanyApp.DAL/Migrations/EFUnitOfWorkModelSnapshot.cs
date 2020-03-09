@@ -66,10 +66,9 @@ namespace DokanyApp.DAL.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(false);
+                    b.Property<string>("Description");
+
+                    b.Property<string>("ImagePath");
 
                     b.HasKey("CategoryId");
 
@@ -93,6 +92,23 @@ namespace DokanyApp.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CreditCard");
+                });
+
+            modelBuilder.Entity("DokanyApp.BLL.Entities.ImageProduct", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ImagePath");
+
+                    b.Property<int>("ProductId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ImageProduct");
                 });
 
             modelBuilder.Entity("DokanyApp.BLL.Order", b =>
@@ -195,6 +211,8 @@ namespace DokanyApp.DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(false);
+
+                    b.Property<int>("Quantity");
 
                     b.HasKey("ProductId");
 
@@ -319,6 +337,14 @@ namespace DokanyApp.DAL.Migrations
                         .WithMany("CartItem")
                         .HasForeignKey("ProductId")
                         .HasConstraintName("FK_CartItem_Product");
+                });
+
+            modelBuilder.Entity("DokanyApp.BLL.Entities.ImageProduct", b =>
+                {
+                    b.HasOne("DokanyApp.BLL.Product", "Products")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("DokanyApp.BLL.Order", b =>

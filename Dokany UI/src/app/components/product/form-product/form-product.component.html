@@ -13,6 +13,21 @@
                 </div>
             </div>
         </div>
+
+        <div class="form-group row">
+            <div class="col-lg-2 col-md-3 col-sm-12">
+                <label for="brandName">Brand Name : </label>
+            </div>
+            <div class="col-lg-8 col-md-6 col-sm-12">
+                <input type="text" name="brandName" placeholder="Brand Name" formControlName="brandName"
+                    class="form-control" required>
+                <div class="alert alert-danger"
+                    *ngIf="!productForm.controls.brandName?.valid && (productForm.controls.brandName?.dirty || productForm.controls.brandName?.touched)">
+                    Please Enter Brand Name
+                </div>
+            </div>
+        </div>
+
         <div class="form-group row">
             <div class="col-lg-2 col-md-3 col-sm-12">
                 <label for="quantity">Product Quantity : </label>
@@ -46,7 +61,7 @@
             <div class="col-lg-8 col-md-6 col-sm-12">
                 <select name="category" class="form-control" formControlName="category" required>
                     <option value="0" [selected]="true">Select Product Category</option>
-                    <option *ngFor="let cat of categories;" [value]="cat.Name">{{ cat.Name }}</option>
+                    <option *ngFor="let cat of categories;" [value]="cat.categoryId">{{ cat.categoryName }}</option>
                 </select>
                 <div class="alert alert-danger"
                     *ngIf="!productForm.controls.category?.valid && (productForm.controls.category?.dirty || productForm.controls.category?.touched)">
@@ -84,10 +99,10 @@
 
         <div class="form-group row">
             <div class="col-lg-2 col-md-3 col-sm-12">
-                <label for="detail">Product Details : </label>
+                <label for="description">Product Description : </label>
             </div>
             <div class="col-lg-8 col-md-6 col-sm-12">
-                <textarea name="detail" formControlName="detail" class="form-control" cols="30" rows="6"></textarea>
+                <textarea name="description" formControlName="description" class="form-control" cols="30" rows="6"></textarea>
             </div>
         </div>
 

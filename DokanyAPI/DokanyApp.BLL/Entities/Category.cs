@@ -12,7 +12,7 @@ namespace DokanyApp.BLL
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string Description { get; set; }
-
+        public string ImagePath { get; set; }
         public virtual ICollection<Product> Product { get; set; }
     }
 }
