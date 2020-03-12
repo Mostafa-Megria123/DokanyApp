@@ -8,3 +8,7 @@ table {
   th.mat-sort-header-sorted {
     color: black;
   }
+
+  .non{
+    display: none;
+}

@@ -11,32 +11,41 @@ import { ToastrService } from 'ngx-toastr';
 export class CategoryListComponent implements OnInit {
   constructor(private _categoryService: CategoryService,
     private toastr: ToastrService
-    ) { }
+  ) { }
   categories: Category[] = null;
   categoryId: Number = 0;
 
+  cols = [
+    { class: 'col-5', field: 'categoryId', header: 'Id' },
+    { class: 'col-15', field: 'non', header: 'Image' },
+    { class: 'col-15', field: 'categoryName', header: 'Name' },
+    { class: 'col-20', field: 'description', header: 'Description' },
+    { class: 'col-10', field: 'non', header: '' },
+    { class: 'col-10', field: 'non', header: '' }
+  ];
   ngOnInit() {
     this._categoryService.getAll().subscribe(data => {
       this.categories = data as Category[];
     });
+
   }
 
-  OnSetIdForDelete(categoryId){
+  OnSetIdForDelete(categoryId) {
     this.categoryId = categoryId;
   }
 
-  OnDelete(){
+  OnDelete() {
     this._categoryService.delete(this.categoryId).subscribe(res => {
       let categIndex = this.categories.findIndex(c => c.Id == this.categoryId);
-      this.categories.splice(categIndex , 1);
+      this.categories.splice(categIndex, 1);
       this.toastr.success('Category Deleted Successfully.');
 
-    } , err => {
+    }, err => {
       this.toastr.error('Some error happen!');
     });
   }
 
-  getImage(imagePath){
+  getImage(imagePath) {
     return this._categoryService.LoadImage(imagePath);
   }
 

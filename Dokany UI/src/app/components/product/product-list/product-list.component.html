@@ -6,35 +6,36 @@
   <br />
   <br />
 
-  <table class="table table-bordered">
+  
+<p-table [columns]="cols" [value]="prodcuts">
+
+  <ng-template pTemplate="header" let-columns>
     <tr>
-      <th class="col-5">Id</th>
-      <th class="col-15">Image</th>
-      <th class="col-20">Name</th>
-      <th class="col-20">Brand Name</th>
-      <th class="col-5">Price</th>
-      <th class="col-5">Quantity</th>
-      <th class="col-5">Category</th>
-      <th class="col-20">Creation Date</th>
-      <th colspan="3" style="text-align: center;">Management</th>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field" [class]='[col.class]'>
+        {{col.header}}
+        <p-sortIcon [field]="col.field" [class]='col.field'></p-sortIcon>
+      </th>
     </tr>
-    <tr *ngFor="let product of prodcuts">
+  </ng-template>
+
+  <ng-template pTemplate="body" let-product>
+    <tr>
       <td>{{ product.productId }}</td>
-      <td><img [src]='getImage(product.imageUrl)' alt="Category Image" width="100" height="100"></td>
+      <td><img [src]='getImage(product.imageUrl)' alt="Product Image" width="100" height="100"></td>
       <td>{{ product.productName }}</td>
       <td>{{ product.brandName }}</td>
       <td>{{ product.price }}</td>
       <td>{{ product.quantity }}</td>
       <td>{{ getCategoryName(product.categoryId) }}</td>
       <td>{{ product.creationDate }}</td>
-
       <td><a [routerLink]="['/home/product' , product.productId]" class="btn btn-info text-light">Edit</a></td>
       <td><a class="btn btn-primary text-light" data-toggle="modal" data-target="#modalDetail">Detail</a></td>
       <td><a class="btn btn-danger text-light" data-toggle="modal" data-target="#exampleModal"
           (click)="OnSetIdForDelete(product.productId)">Delete</a></td>
     </tr>
-  </table>
+  </ng-template>
 
+</p-table>
 
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

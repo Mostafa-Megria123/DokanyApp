@@ -18,6 +18,19 @@ export class ProductListComponent implements OnInit {
   prodcuts = null;
   categories = null;
   productId: Number = 0;
+  cols = [
+    { class: 'col-5', field: 'productId', header: 'Id' },
+    { class: 'col-15', field: 'non', header: 'Image' },
+    { class: 'col-15', field: 'productName', header: 'Name' },
+    { class: 'col-15', field: 'brandName', header: 'Brand Name' },
+    { class: 'col-10', field: 'price', header: 'Price' },
+    { class: 'col-10', field: 'quantity', header: 'Quantity' },
+    { class: 'col-10', field: 'categoryId', header: 'Category' },
+    { class: 'col-15', field: 'creationDate', header: 'Creation Date' },
+    { class: 'col-10', field: 'non', header: '' },
+    { class: 'col-10', field: 'non', header: '' },
+    { class: 'col-10', field: 'non', header: '' }
+  ];
 
   ngOnInit() {
     this._productService.getAll().subscribe(data => {
