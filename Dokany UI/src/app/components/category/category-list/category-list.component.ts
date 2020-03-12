@@ -17,11 +17,11 @@ export class CategoryListComponent implements OnInit {
 
   cols = [
     { class: 'col-5', field: 'categoryId', header: 'Id' },
-    { class: 'col-15', field: 'non', header: 'Image' },
+    { class: 'col-10', field: 'non', header: 'Image' },
     { class: 'col-15', field: 'categoryName', header: 'Name' },
     { class: 'col-20', field: 'description', header: 'Description' },
-    { class: 'col-10', field: 'non', header: '' },
-    { class: 'col-10', field: 'non', header: '' }
+    { class: 'col-5', field: 'non', header: '' },
+    { class: 'col-5', field: 'non', header: '' }
   ];
   ngOnInit() {
     this._categoryService.getAll().subscribe(data => {

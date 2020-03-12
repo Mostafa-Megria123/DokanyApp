@@ -28,10 +28,10 @@
       <td>{{ product.quantity }}</td>
       <td>{{ getCategoryName(product.categoryId) }}</td>
       <td>{{ product.creationDate }}</td>
-      <td><a [routerLink]="['/home/product' , product.productId]" class="btn btn-info text-light">Edit</a></td>
-      <td><a class="btn btn-primary text-light" data-toggle="modal" data-target="#modalDetail">Detail</a></td>
+      <td><a [routerLink]="['/home/product' , product.productId]" class="btn btn-info text-light"><i class="pi pi-pencil"></i></a></td>
+      <td><a class="btn btn-primary text-light" data-toggle="modal" data-target="#modalDetail"><i class="pi pi-eye"></i></a></td>
       <td><a class="btn btn-danger text-light" data-toggle="modal" data-target="#exampleModal"
-          (click)="OnSetIdForDelete(product.productId)">Delete</a></td>
+          (click)="OnSetIdForDelete(product.productId)"><i class="pi pi-trash"></i></a></td>
     </tr>
   </ng-template>
 

@@ -22,9 +22,9 @@
       <td><img [src]='getImage(category.imagePath)' alt="Category Image" width="100" height="100"></td>
       <td>{{category.categoryName}}</td>
       <td>{{category.description}}</td>
-      <td><a [routerLink]="['/home/category' , category.categoryId]" class="btn btn-info text-light">Edit</a></td>
+      <td><a [routerLink]="['/home/category' , category.categoryId]" class="btn btn-info text-light"><i class="pi pi-pencil"></i></a></td>
       <td><a class="btn btn-danger text-light" data-toggle="modal" data-target="#exampleModal"
-          (click)="OnSetIdForDelete(category.categoryId)">Delete</a></td>
+          (click)="OnSetIdForDelete(category.categoryId)"><i class="pi pi-trash"></i></a></td>
     </tr>
   </ng-template>
 </p-table>

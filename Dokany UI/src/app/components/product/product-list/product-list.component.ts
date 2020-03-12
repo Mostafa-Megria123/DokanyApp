@@ -27,9 +27,9 @@ export class ProductListComponent implements OnInit {
     { class: 'col-10', field: 'quantity', header: 'Quantity' },
     { class: 'col-10', field: 'categoryId', header: 'Category' },
     { class: 'col-15', field: 'creationDate', header: 'Creation Date' },
-    { class: 'col-10', field: 'non', header: '' },
-    { class: 'col-10', field: 'non', header: '' },
-    { class: 'col-10', field: 'non', header: '' }
+    { class: 'col-7', field: 'non', header: '' },
+    { class: 'col-7', field: 'non', header: '' },
+    { class: 'col-7', field: 'non', header: '' }
   ];
 
   ngOnInit() {
