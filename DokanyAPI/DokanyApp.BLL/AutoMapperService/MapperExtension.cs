@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using DokanyApp.BLL.DTO;
+using DokanyApp.BLL.Entities;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -32,6 +34,8 @@ namespace DokanyApp.BLL.AutoMapperService
 
             CreateMap<ShippingInfo, ShippingInfoDTO>()
                 .ForMember(dest => dest.Address, act => act.MapFrom(src => src.Description));
+
+            CreateMap<ImageProduct, ImageProductDto>();
         }
     }
 }

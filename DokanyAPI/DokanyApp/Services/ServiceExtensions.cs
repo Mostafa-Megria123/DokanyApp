@@ -56,6 +56,7 @@ namespace DokanyApp.Services
             services.AddTransient<ICartItemService, CartItemService>();
             services.AddTransient<ICreditCardService, CreditCardService>();
             services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IImagesProductService, ImagesProductService>();
             services.AddTransient(typeof(IRepository<>), typeof(EFRepository<>));
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
             services.AddScoped<EFUnitOfWork, EFUnitOfWork>();

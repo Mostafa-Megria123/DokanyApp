@@ -5,6 +5,8 @@ import { NoopAnimationsModule} from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { TableModule } from 'primeng/table';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { GalleriaModule } from 'primeng/galleria';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -58,6 +60,7 @@ const ngWizardConfig: NgWizardConfig = {
     NoopAnimationsModule,
     TableModule,
     MultiSelectModule,
+    GalleriaModule,
     ToastrModule.forRoot({
       timeOut: 1000,
       positionClass: 'toast-bottom-right',

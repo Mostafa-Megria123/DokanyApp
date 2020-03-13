@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { HttpEventType } from '@angular/common/http';
 
@@ -113,9 +113,12 @@ export class FormProductComponent implements OnInit {
       return;
     }
 
-    let fileToUpload = <File>files[0];
-    this.message = fileToUpload.name;
-    this.formData.append('file', fileToUpload, fileToUpload.name);
+    let filesToUpload : File[] = files;
+
+    Array.from(filesToUpload).map((file, index) => {
+      return this.formData.append('file' + index, file, file.name);
+    });
+    this.message = 'Images Uploaded';
   }
 
 }

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from 'src/app/Services/Products/product.service';
 import { CategoryService } from 'src/app/Services/Category/category.service';
 import { ToastrService } from 'ngx-toastr';
+import { Product } from 'src/app/models/Product';
+import { ProductImage } from 'src/app/models/ProductImage';
 
 @Component({
   selector: 'app-product-list',
@@ -10,14 +12,17 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ProductListComponent implements OnInit {
 
-  constructor(private _productService: ProductService, 
+  constructor(private _productService: ProductService,
     private _categoryService: CategoryService,
     private toastr: ToastrService
-) { }
+  ) { }
 
   prodcuts = null;
   categories = null;
+  images: any[];
   productId: Number = 0;
+  product: Product = null;
+  categoryName: String = '';
   cols = [
     { class: 'col-5', field: 'productId', header: 'Id' },
     { class: 'col-15', field: 'non', header: 'Image' },
@@ -40,27 +45,41 @@ export class ProductListComponent implements OnInit {
     this._categoryService.getAll().subscribe(res => {
       this.categories = res;
     });
+    this.images = [];
   }
 
-  OnSetIdForDelete(productId){
+  OnShowDetail(productId) {
+    this.product = this.prodcuts.find(p => p.productId == productId);
+    this.categoryName = this.getCategoryName(this.product['categoryId']);
+    this._productService.GetImagesPaths(productId).subscribe(res => {
+      var ProductImage = res as ProductImage[];
+      this.images = [];
+      ProductImage.forEach(item => {
+        this.images.push({ source : this.getImage(item['imagePath']) });
+      });
+    });
+  }
+
+  OnSetIdForDelete(productId) {
     this.productId = productId;
   }
 
-  OnDelete(){
-    this._productService.delete(this.productId).subscribe(res => {} , err => {
+  OnDelete() {
+    this._productService.delete(this.productId).subscribe(res => { }, err => {
       this.toastr.error('Some error happen!');
-    } , () => {
-      let prodIndex= this.prodcuts.findIndex(p => p.productId = this.productId);
-      this.prodcuts.splice(prodIndex , 1);
+    }, () => {
+      let prodIndex = this.prodcuts.findIndex(p => p.productId = this.productId);
+      this.prodcuts.splice(prodIndex, 1);
       this.toastr.success('Category Deleted Successfully.');
     });
   }
 
-  getCategoryName(categoryId){
-    return this.categories.find(c => c.categoryId = categoryId).categoryName;
+  getCategoryName(categoryId) {
+    if (this.categories != null)
+      return this.categories.find(c => c.categoryId = categoryId).categoryName;
   }
 
-  getImage(imageUrl){
+  getImage(imageUrl) {
     return this._productService.LoadImage(imageUrl);
   }
 }

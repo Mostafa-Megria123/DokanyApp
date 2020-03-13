@@ -1,4 +1,5 @@
 ﻿using DokanyApp.BLL;
+using DokanyApp.BLL.Interfaces;
 using DokanyApp.LoggingService;
 using DokanyApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -12,12 +13,15 @@ namespace DokanyApp.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService productService;
+        private readonly IImagesProductService imagesProductService;
         private readonly ILoggerManager logger;
 
         public ProductController(IProductService productService,
+            IImagesProductService imagesProductService,
             ILoggerManager logger)
         {
             this.productService = productService ?? throw new ArgumentNullException(nameof(productService));
+            this.imagesProductService = imagesProductService ?? throw new ArgumentNullException(nameof(imagesProductService));
             this.logger = logger;
         }
 
@@ -155,6 +159,32 @@ namespace DokanyApp.Controllers
                 }
             }
             return BadRequest();
+        }
+
+        [HttpGet]
+        [Route("Images")]
+        public async Task<IActionResult> GetImages(int productId) 
+        {
+            if (productId == null)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var images = await imagesProductService.GetImages(productId);
+
+                if (images == null)
+                {
+                    return NotFound();
+                }
+                return Ok(images);
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+
         }
     }
 }

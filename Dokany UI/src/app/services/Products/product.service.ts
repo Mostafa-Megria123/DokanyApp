@@ -38,4 +38,8 @@ export class ProductService {
     return this.url + "api/Upload?imagePath=" + imageUrl;
   }
 
+  GetImagesPaths(productId: Number){
+    return this._http.get(this.url + "api/Product/Images?productId=" + productId);
+  }
+
 }
