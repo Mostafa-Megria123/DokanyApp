@@ -1,5 +1,8 @@
-﻿using DokanyApp.BLL;
+﻿using AutoMapper;
+using DokanyApp.BLL;
+using DokanyApp.BLL.DTO;
 using DokanyApp.LoggingService;
+using DokanyApp.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -10,34 +13,37 @@ namespace DokanyApp.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly IOrderService orderService;
-        private readonly ILoggerManager logger;
+        private readonly IOrderService _orderService;
+        private readonly ILoggerManager _logger;
+        private readonly IMapper _mapper;
 
-        public OrderController(IOrderService orderService,
-            ILoggerManager logger)
+        public OrderController(
+            IOrderService orderService,
+            ILoggerManager logger,
+            IMapper mapper)
         {
-            this.orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
-            this.logger = logger;
+            _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
+            _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            logger.LogInfo("Here is info message from the Eslaaaam.");
-            logger.LogDebug("Here is debug message from the Megria.");
-            logger.LogError("Here is debug message from the Dola.");
-
             try
             {
-                var data = await orderService.Get();
+                var data = await _orderService.Get();
                 if (data == null)
                 {
+                    _logger.LogWarn("Order data not found");
                     return NotFound();
                 }
+                _logger.LogInfo("Order data retreived");
                 return Ok(data);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError($"error happens while order data retreived: {ex.Message}");
                 return BadRequest();
             }
         }
@@ -46,82 +52,76 @@ namespace DokanyApp.Controllers
         [Route("{id}")]
         public async Task<IActionResult> FindById(int id)
         {
-            logger.LogInfo("Here is info message from the Eslaaaam.");
-            logger.LogError("Here is debug message from the Dola.");
 
-#pragma warning disable CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
-            if (id == null)
-#pragma warning restore CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
-            {
+            if (id <= 0)
                 return BadRequest();
-            }
 
             try
             {
-                var data = await orderService.FindById(id);
-
+                var data = await _orderService.FindById(id);
                 if (data == null)
-                {
                     return NotFound();
-                }
+
                 return Ok(data);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError($"error happens while order: {id} , retreived: {ex.Message}");
                 return BadRequest();
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> RemovePrdById(int id)
         {
-#pragma warning disable CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
-            if (id == null)
-#pragma warning restore CS0472 // The result of the expression is always the same since a value of this type is never equal to 'null'
+            if (id <= 0)
             {
+                _logger.LogError($"order id is wrong {id}");
                 return BadRequest();
             }
 
             try
             {
-                await orderService.Remove(id);
-                return Ok("Order number " + id + " Removed Successfully");
+                await _orderService.Remove(id);
+                _logger.LogInfo($"Order id: {id} is removed");
+                return Ok();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError($"error happens while order: {id} , removed: {ex.Message}");
                 return BadRequest();
             }
         }
 
         [HttpPost]
-        [Route("AddProduct")]
-        public async Task<IActionResult> CreateProduct([FromBody]Order order)
+        public async Task<IActionResult> CreateOrder([FromBody]OrderViewModel orderViewModel)
         {
             if (ModelState.IsValid)
             {
-                try
+                var orderCreationDto = _mapper.Map<OrderCreationDto>(orderViewModel);
+                var orderAdded = await _orderService.Add(orderCreationDto);
+
+                if (orderAdded)
                 {
-                  //  await orderService.Add(order);
-                    return Ok("Product Was Added Successfully");
+                    _logger.LogInfo("new order added");
+                    return Ok();
                 }
-                catch (Exception)
-                {
-                    return BadRequest();
-                }
+                else
+                    return StatusCode(500);
             }
             return BadRequest();
         }
 
-        [HttpPost]
-        [Route("UpdateProduct")]
-        public async Task<IActionResult> UpdateProduct([FromBody]Order order)
+        [HttpPut]
+        public async Task<IActionResult> UpdateOrder([FromBody]OrderDTO order)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await orderService.Update(order);
-                    return Ok("Product Was Updated Successfully");
+                    await _orderService.Update(order);
+                    _logger.LogInfo("Order Was Updated Successfully");
+                    return Ok();
                 }
                 catch (Exception ex)
                 {
@@ -129,10 +129,12 @@ namespace DokanyApp.Controllers
                     {
                         return NotFound();
                     }
+                    _logger.LogError($"error happens while order: {order.Id} updated: {ex.Message}");
                     return BadRequest();
                 }
             }
             return BadRequest();
         }
+
     }
 }

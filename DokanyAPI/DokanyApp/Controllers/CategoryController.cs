@@ -117,7 +117,7 @@ namespace DokanyApp.Controllers
             {
                 try
                 {
-                     await categoryService.Update(new Category { CategoryId = category.Id, CategoryName = category.Name, Description = category.Description, ImagePath = category.ImagePath });
+                     await categoryService.Update(new Category { Id = category.Id, CategoryName = category.Name, Description = category.Description, ImagePath = category.ImagePath });
                     return Ok();
                 }
                 catch (Exception ex)

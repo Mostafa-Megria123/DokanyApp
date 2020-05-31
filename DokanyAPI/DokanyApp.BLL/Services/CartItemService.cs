@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DokanyApp.BLL.Interfaces;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DokanyApp.BLL.Services
@@ -26,14 +25,16 @@ namespace DokanyApp.BLL.Services
             await _uof.CommitAsync();
         }
 
-        public async Task<CartItemDTO> Any(CartItemDTO cartItemDTO)
+        public async Task<List<CartItemDTO>> Any(CartItemDTO cartItemDTO)
         {
-            var cartItems = await Get();
-            var cartItem = cartItems.FirstOrDefault(c => c.Name == cartItemDTO.Name && c.Total == cartItemDTO.Total && c.Quantity == cartItemDTO.Quantity
+            var cartItems = await _repository.GetByWhere(c => c.Name == cartItemDTO.Name && c.Total == cartItemDTO.Total && c.Quantity == cartItemDTO.Quantity
             && c.UnitCost == cartItemDTO.UnitCost);
 
             if (cartItems != null)
-                return cartItem;
+            {
+                var cartItemDto = _mapper.Map<List<CartItemDTO>>(cartItems);
+                return cartItemDto;
+            }
 
             return null;
         }

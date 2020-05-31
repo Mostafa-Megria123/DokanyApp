@@ -134,7 +134,7 @@ namespace DokanyApp.Controllers
                 {
                     await productService.Update(new Product
                     {
-                        ProductId = product.Id,
+                        Id = product.Id,
                         BrandName = product.BrandName,
                         CategoryId = product.Category,
                         Description = product.Description,

@@ -1,6 +1,9 @@
 ﻿using DokanyApp.BLL;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace DokanyApp.DAL
@@ -49,6 +52,11 @@ namespace DokanyApp.DAL
             dbContext.Entry(item).State = EntityState.Modified;
 
             await dbContext.CommitAsync();
+        }
+
+        public async Task<List<T>> GetByWhere(Expression<Func<T, bool>> expression)
+        {
+            return await dbContext.Set<T>().Where(expression).ToListAsync();
         }
     }
 }

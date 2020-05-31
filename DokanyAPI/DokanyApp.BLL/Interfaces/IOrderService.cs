@@ -1,6 +1,5 @@
 ﻿using DokanyApp.BLL.DTO;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DokanyApp.BLL
@@ -11,7 +10,7 @@ namespace DokanyApp.BLL
         Task<List<OrderDTO>> FindByUser(int userId);
         Task<OrderDTO> FindById(int Id);
         Task Remove(int Id);
-        Task<int> Add(OrderCreationDto order);
-        Task Update(Order order);
+        Task<bool> Add(OrderCreationDto order);
+        Task Update(OrderDTO order);
     }
 }

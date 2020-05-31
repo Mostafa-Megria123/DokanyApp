@@ -63,7 +63,7 @@ namespace DokanyApp.BLL
             {
                 await categoryRepository.Add(category);
                 await uof.CommitAsync();
-                return category.CategoryId;
+                return category.Id;
             }
             return 0;
         }

@@ -58,6 +58,7 @@ namespace DokanyApp.Services
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<IImagesProductService, ImagesProductService>();
             services.AddTransient(typeof(IRepository<>), typeof(EFRepository<>));
+            services.AddTransient<ITransaction, Transaction>();
             services.AddScoped<IUnitOfWork, EFUnitOfWork>();
             services.AddScoped<EFUnitOfWork, EFUnitOfWork>();
             services.AddSingleton<ILoggerManager, LoggerManager>();

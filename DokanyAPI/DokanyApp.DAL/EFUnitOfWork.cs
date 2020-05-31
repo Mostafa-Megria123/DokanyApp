@@ -84,14 +84,14 @@ namespace DokanyApp.DAL
 
             modelBuilder.Entity<Order>(entity =>
             {
-               entity.HasIndex(e => e.CartItemIId)
+               entity.HasIndex(e => e.CartItemId)
                    .HasName("IX_Order_ShoppingCartIId");
 
-                entity.HasIndex(e => e.CustomerId);
+                entity.HasIndex(e => e.UserId);
 
-                entity.HasIndex(e => e.ShippingId);
+                entity.HasIndex(e => e.ShippingAddressId);
 
-                entity.Property(e => e.CartItemIId).HasColumnName("CartItemIId");
+                entity.Property(e => e.CartItemId).HasColumnName("CartItemIId");
 
                 entity.Property(e => e.CreationDate).HasColumnType("datetime");
 
@@ -108,38 +108,38 @@ namespace DokanyApp.DAL
 
                 entity.HasOne(d => d.CartItemI)
                     .WithMany(p => p.Order)
-                    .HasForeignKey(d => d.CartItemIId)
+                    .HasForeignKey(d => d.CartItemId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_CartItem");
 
-                entity.HasOne(d => d.Customer)
+                entity.HasOne(d => d.User)
                     .WithMany(p => p.Order)
-                    .HasForeignKey(d => d.CustomerId)
+                    .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_User");
 
-                entity.HasOne(d => d.Shipping)
-                    .WithMany(p => p.Order)
-                    .HasForeignKey(d => d.ShippingId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_ShippingInfo");
+                //entity.HasOne(d => d.ShippingAddress)
+                //    .WithMany(p => p.Order)
+                //    .HasForeignKey(d => d.ShippingId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("FK_Order_ShippingAddress");
             });
 
             modelBuilder.Entity<OrderDetails>(entity =>
             {
-                entity.Property(e => e.OrderDetailsId).ValueGeneratedNever();
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.UnitCost).HasColumnType("decimal(18, 0)");
 
                 entity.HasOne(d => d.OrderDetailsNavigation)
                     .WithOne(p => p.OrderDetails)
-                    .HasForeignKey<OrderDetails>(d => d.OrderDetailsId)
+                    .HasForeignKey<OrderDetails>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetails_Order");
 
                 entity.HasOne(d => d.OrderDetails1)
                     .WithOne(p => p.OrderDetails)
-                    .HasForeignKey<OrderDetails>(d => d.OrderDetailsId)
+                    .HasForeignKey<OrderDetails>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetails_Product");
             });
@@ -186,7 +186,7 @@ namespace DokanyApp.DAL
 
             modelBuilder.Entity<ShippingInfo>(entity =>
             {
-                entity.HasKey(e => e.ShippingId);
+                entity.HasKey(e => e.Id);
 
                 entity.Property(e => e.Description)
                     .IsRequired()

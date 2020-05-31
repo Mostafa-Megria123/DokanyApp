@@ -1,9 +1,11 @@
-﻿using DokanyApp.BLL.Entities;
-using System;
+﻿
+using DokanyApp.BLL;
+using DokanyApp.BLL.DTO;
+using DokanyApp.BLL.Entities;
 
-namespace DokanyApp.BLL.DTO
+namespace DokanyApp.ViewModels
 {
-    public class OrderCreationDto
+    public class OrderViewModel
     {
         public int ShippingId { get; set; }
         public string Description { get; set; }

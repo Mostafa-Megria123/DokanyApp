@@ -69,10 +69,10 @@ namespace DokanyApp.BLL
                 if (imagesUrl != null)
                     foreach (var imagePath in imagesUrl)
                     {
-                        _imageProductRepository.Add(new ImageProduct { ImagePath = imagePath, ProductId = product.ProductId });
+                        _imageProductRepository.Add(new ImageProduct { ImagePath = imagePath, ProductId = product.Id });
                     }
                 await uof.CommitAsync();
-                return product.ProductId;
+                return product.Id;
             }
             return 0;
         }

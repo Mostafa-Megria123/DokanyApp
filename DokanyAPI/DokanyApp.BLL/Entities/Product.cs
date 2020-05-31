@@ -10,7 +10,7 @@ namespace DokanyApp.BLL
             CartItem = new HashSet<CartItem>();
         }
 
-        public int ProductId { get; set; }
+        public int Id { get; set; }
         public string ProductName { get; set; }
         public string BrandName { get; set; }
         public string Description { get; set; }

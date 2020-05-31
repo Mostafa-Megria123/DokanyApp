@@ -10,10 +10,11 @@ namespace DokanyApp.BLL
 {
     public class OrderService : IOrderService
     {
-        private readonly IRepository<Order> orderRepository;
+        private readonly IRepository<Order> _orderRepository;
         private readonly IShippingAddressService _shippingAddressService;
         private readonly ICreditCardService _creditCardService;
         private readonly ICartItemService _cartItemService;
+        private readonly ITransaction _transaction;
         private readonly IUnitOfWork uof;
         private readonly IMapper mapper;
 
@@ -21,22 +22,24 @@ namespace DokanyApp.BLL
             IShippingAddressService shippingAddressService,
             ICreditCardService creditCardService,
             ICartItemService cartItemService,
+            ITransaction transaction,
             IUnitOfWork uof,
             IMapper mapper)
         {
-            this.orderRepository = orderRepository;
+            _orderRepository = orderRepository;
             _shippingAddressService = shippingAddressService;
             _creditCardService = creditCardService;
             _cartItemService = cartItemService;
+            _transaction = transaction;
             this.uof = uof;
             this.mapper = mapper;
         }
 
         public async Task<List<OrderDTO>> Get()
         {
-            if (orderRepository != null)
+            if (_orderRepository != null)
             {
-                var order = await orderRepository.Get();
+                var order = await _orderRepository.Get();
                 var orderDTO = mapper.Map<List<OrderDTO>>(order);
 
                 return orderDTO;
@@ -46,10 +49,10 @@ namespace DokanyApp.BLL
 
         public async Task<OrderDTO> FindById(int Id)
         {
-            if (orderRepository != null)
+            if (_orderRepository != null)
             {
                 if (Id < 1) throw new ArgumentException("id must be positive int");
-                var order = await orderRepository.GetById(Id);
+                var order = await _orderRepository.GetById(Id);
                 var orderDTO = mapper.Map<OrderDTO>(order);
 
                 return orderDTO;
@@ -59,86 +62,102 @@ namespace DokanyApp.BLL
 
         public async Task Remove(int Id)
         {
-            if (orderRepository != null)
+            if (_orderRepository != null)
             {
                 if (Id < 1) throw new ArgumentException("id must be positive int");
-                var order = await orderRepository.GetById(Id);
-                await orderRepository.Remove(order);
+                var order = await _orderRepository.GetById(Id);
+                await _orderRepository.Remove(order);
 
                 await uof.CommitAsync();
             }
         }
 
-        public async Task<int> Add(OrderCreationDto order)
+        public async Task<bool> Add(OrderCreationDto order)
         {
-            if (orderRepository != null)
+            if (_orderRepository != null)
             {
-                // register shipping address and get it.
-                var shippingAddress = await _shippingAddressService.Any(order.ShippingAddressDto);
-                if (shippingAddress == null)
+                try
                 {
-                    await _shippingAddressService.Add(order.ShippingAddressDto);
-                    shippingAddress = await _shippingAddressService.Any(order.ShippingAddressDto);
+                    _transaction.BeginTransaction();
+                    // register shipping address and get it.
+                    var shippingAddress = await _shippingAddressService.Any(order.ShippingAddressDto);
+                    if (shippingAddress == null)
+                    {
+                        await _shippingAddressService.Add(order.ShippingAddressDto);
+                        shippingAddress = await _shippingAddressService.Any(order.ShippingAddressDto);
+                    }
+
+                    //register creditcard and get it.
+                    var creditCard = await _creditCardService.Any(order.CreditCardDto);
+                    if (creditCard == null)
+                    {
+                        await _creditCardService.Add(order.CreditCardDto);
+                        creditCard = await _creditCardService.Any(order.CreditCardDto);
+                    }
+
+                    //register cardItem
+                    var cardItems = await _cartItemService.Any(order.CartItemDTO);
+                    if (!cardItems.Any())
+                    {
+                        await _cartItemService.Add(order.CartItemDTO);
+                        cardItems = await _cartItemService.Any(order.CartItemDTO);
+                    }
+                    //register order
+                    var newOrder = new Order
+                    {
+                        CreationDate = DateTime.Now,
+                        ShippingDate = DateTime.Now,
+                        Description = order.Description,
+                        ShippingCost = order.ShippingCost,
+                        UserId = order.UserId,
+                        PaymentMethod = order.PaymentMethodType,
+                        Total = order.TotalCost,
+                        CartItemId = cardItems[0].Id,
+                        ShippingAddressId = shippingAddress.Id,
+                        CreditCardId = creditCard.Id,
+                        OrderingStatus = OrderStatusENU.New
+                    };
+                    await _orderRepository.Add(newOrder);
+
+                    await uof.CommitAsync();
+
+                    _transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    _transaction.RollBack();
+
+                    return false;
                 }
 
-                //register creditcard and get it.
-                var creditCard = await _creditCardService.Any(order.CreditCardDto);
-                if (creditCard == null)
-                {
-                    await _creditCardService.Add(order.CreditCardDto);
-                    creditCard = await _creditCardService.Any(order.CreditCardDto);
-                }
-
-                //register cardItem
-                var cardItem = await _cartItemService.Any(order.CartItemDTO);
-                if (cardItem == null)
-                {
-                    await _cartItemService.Add(order.CartItemDTO);
-                    cardItem = await _cartItemService.Any(order.CartItemDTO);
-                }
-                //register order
-                var newOrder = new Order 
-                {
-                    CreationDate = order.CreationDate,
-                    Description = order.Description,
-                    ShippingCost = order.ShippingCost,
-                    CustomerId = order.UserId,
-                    PaymentMethod = order.PaymentMethodType,
-                    Total = order.TotalCost,
-                    CartItemIId = cardItem.CartItemId,
-                    ShippingId = shippingAddress.Id,
-                    CreditCardId = creditCard.Id
-                };
-                await orderRepository.Add(newOrder);
-
-                await uof.CommitAsync();
-                
             }
-            return 0;
+            return true;
         }
 
-        public async Task Update(Order order)
+        public async Task Update(OrderDTO order)
         {
-            if (orderRepository != null)
+            if (_orderRepository != null)
             {
-                await orderRepository.Update(order);
+                var updatedOrder = mapper.Map<Order>(order);
+                await _orderRepository.Update(updatedOrder);
                 await uof.CommitAsync();
             }
         }
 
         public async Task<List<OrderDTO>> FindByUser(int userId)
         {
-            if (orderRepository != null)
+            if (_orderRepository != null)
             {
                 if (userId < 1) throw new ArgumentException("id must be positive int");
-                var ordersRepo = await orderRepository.Get();
-                var _orders = ordersRepo.Where(o => o.CustomerId == userId);
+                var ordersRepo = await _orderRepository.Get();
+                var _orders = ordersRepo.Where(o => o.UserId == userId);
                 var orderDTO = mapper.Map<List<OrderDTO>>(_orders);
 
                 return orderDTO;
             }
             return null;
         }
+
     }
 }
 

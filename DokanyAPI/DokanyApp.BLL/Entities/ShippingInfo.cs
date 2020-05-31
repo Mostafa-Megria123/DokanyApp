@@ -9,7 +9,7 @@ namespace DokanyApp.BLL
             Order = new HashSet<Order>();
         }
 
-        public int ShippingId { get; set; }
+        public int Id { get; set; }
         public string ShippingType { get; set; }
         public string ShippingCost { get; set; }
         public string Description { get; set; }
