@@ -32,9 +32,8 @@ namespace DokanyApp.Controllers
             {
                 var data = await productService.Get();
                 if (data == null)
-                {
                     return NotFound();
-                }
+                logger.LogInfo("Products are retreived.");
                 return Ok(data);
             }
             catch (Exception ex)
@@ -49,22 +48,21 @@ namespace DokanyApp.Controllers
         public async Task<IActionResult> FindById(int id)
         {
             if (id == null)
-            {
                 return BadRequest();
-            }
 
             try
             {
                 var data = await productService.FindById(id);
-
                 if (data == null)
-                {
                     return NotFound();
-                }
+
+                logger.LogInfo($"Product {id} is retreived.");
+
                 return Ok(data);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError($"Some error happen for retreiving product {id} : {ex.Message}");
                 return BadRequest();
             }
         }
@@ -102,9 +100,9 @@ namespace DokanyApp.Controllers
                     await productService.Add(new Product
                     {
                         BrandName = product.BrandName,
-                        CategoryId = product.Category,
+                        CategoryId = product.CategoryId,
                         Description = product.Description,
-                        ProductName = product.Name,
+                        Name = product.Name,
                         Quantity = product.Quantity,
                         Price = product.Price,
                         ImageUrl = product.ImagePaths[0],
@@ -136,9 +134,9 @@ namespace DokanyApp.Controllers
                     {
                         Id = product.Id,
                         BrandName = product.BrandName,
-                        CategoryId = product.Category,
+                        CategoryId = product.CategoryId,
                         Description = product.Description,
-                        ProductName = product.Name,
+                        Name = product.Name,
                         Quantity = product.Quantity,
                         Price = product.Price,
                         ImageUrl = product.ImagePaths[0],
@@ -173,11 +171,9 @@ namespace DokanyApp.Controllers
             try
             {
                 var images = await imagesProductService.GetImages(productId);
-
                 if (images == null)
-                {
                     return NotFound();
-                }
+                logger.LogInfo($"Images for projcet {productId} are retreived.");
                 return Ok(images);
             }
             catch (Exception)

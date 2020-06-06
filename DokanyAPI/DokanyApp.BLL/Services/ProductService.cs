@@ -8,9 +8,9 @@ namespace DokanyApp.BLL
 {
     public class ProductService : IProductService
     {
-        private IRepository<Product> productRepository;
-        private IRepository<ImageProduct> _imageProductRepository;
-        private IUnitOfWork uof;
+        private readonly IRepository<Product> _productRepository;
+        private readonly IRepository<ImageProduct> _imageProductRepository;
+        private readonly IUnitOfWork uof;
         private readonly IMapper mapper;
 
         public ProductService(IRepository<Product> productRepository,
@@ -18,7 +18,7 @@ namespace DokanyApp.BLL
             IUnitOfWork uof,
             IMapper mapper)
         {
-            this.productRepository = productRepository;
+            this._productRepository = productRepository;
             _imageProductRepository = imageProductRepository;
             this.uof = uof;
             this.mapper = mapper;
@@ -26,9 +26,9 @@ namespace DokanyApp.BLL
 
         public async Task<List<ProductDTO>> Get()
         {
-            if (productRepository != null)
+            if (_productRepository != null)
             {
-                var prd = await productRepository.Get();
+                var prd = await _productRepository.Get();
                 var prdDTO = mapper.Map<List<ProductDTO>>(prd);
 
                 return prdDTO;
@@ -38,10 +38,10 @@ namespace DokanyApp.BLL
 
         public async Task<ProductDTO> FindById(int Id)
         {
-            if (productRepository != null)
+            if (_productRepository != null)
             {
                 if (Id < 1) throw new ArgumentException("id must be positive int");
-                var prd = await productRepository.GetById(Id);
+                var prd = await _productRepository.GetById(Id);
                 var prdDTO = mapper.Map<ProductDTO>(prd);
 
                 return prdDTO;
@@ -51,11 +51,11 @@ namespace DokanyApp.BLL
 
         public async Task Remove(int Id)
         {
-            if (productRepository != null)
+            if (_productRepository != null)
             {
                 if (Id < 1) throw new ArgumentException("id must be positive int");
-                var prd = await productRepository.GetById(Id);
-                await productRepository.Remove(prd);
+                var prd = await _productRepository.GetById(Id);
+                await _productRepository.Remove(prd);
 
                 await uof.CommitAsync();
             }
@@ -63,9 +63,9 @@ namespace DokanyApp.BLL
 
         public async Task<int> Add(Product product , string[] imagesUrl = null)
         {
-            if (productRepository != null)
+            if (_productRepository != null)
             {
-                await productRepository.Add(product);
+                await _productRepository.Add(product);
                 if (imagesUrl != null)
                     foreach (var imagePath in imagesUrl)
                     {
@@ -79,9 +79,9 @@ namespace DokanyApp.BLL
 
         public async Task Update(Product product)
         {
-            if (productRepository != null)
+            if (_productRepository != null)
             {
-                await productRepository.Update(product);
+                await _productRepository.Update(product);
                 await uof.CommitAsync();
             }
         }

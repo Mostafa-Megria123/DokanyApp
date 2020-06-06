@@ -28,9 +28,8 @@ namespace DokanyApp.Controllers
             {
                 var data = await categoryService.Get();
                 if (data == null)
-                {
                     return NotFound();
-                }
+
                 logger.LogInfo("Retreive all categories.");
                 return Ok(data);
             }
@@ -46,24 +45,20 @@ namespace DokanyApp.Controllers
         public async Task<IActionResult> FindById(int id)
         {
             if (id == null)
-            {
                 return BadRequest();
-            }
 
             try
             {
                 var data = await categoryService.FindById(id);
-                logger.LogInfo($"Retreive Category for id {id}");
                 if (data == null)
-                {
                     return NotFound();
-                }
+
+                logger.LogInfo($"Retreive Category for id {id}");
                 return Ok(data);
             }
             catch (Exception ex)
             {
                 logger.LogError($"Error happens for retreive category of {id}" + ex.Message);
-
                 return BadRequest();
             }
         }
@@ -89,7 +84,6 @@ namespace DokanyApp.Controllers
         }
 
         [HttpPost]
-        [Route("AddCategory")]
         public async Task<IActionResult> CreateCategory([FromBody] CategoryViewModel category)
         {
 
@@ -97,12 +91,13 @@ namespace DokanyApp.Controllers
             {
                 try
                 {
-                    await categoryService.Add(new Category { CategoryName = category.Name, Description = category.Description , ImagePath = category.ImagePath});
+                    await categoryService.Add(new Category { Name = category.Name, Description = category.Description , ImagePath = category.ImagePath});
                     logger.LogInfo("New Category Added");
                     return Ok("Category Was Added Successfully");
                 }
                 catch (Exception ex)
                 {
+                    logger.LogError($"Some errro happedn while adding new category {ex.Message}");
                     return BadRequest();
                 }
             }
@@ -110,14 +105,14 @@ namespace DokanyApp.Controllers
         }
 
         [HttpPost]
-        [Route("UpdateCategory")]
         public async Task<IActionResult> UpdateCatgory([FromBody]CategoryViewModel category)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                     await categoryService.Update(new Category { Id = category.Id, CategoryName = category.Name, Description = category.Description, ImagePath = category.ImagePath });
+                     await categoryService.Update(new Category { Id = category.Id, Name = category.Name, Description = category.Description, ImagePath = category.ImagePath });
+                    logger.LogInfo($"Category {category.Id} is updated");
                     return Ok();
                 }
                 catch (Exception ex)
@@ -126,6 +121,7 @@ namespace DokanyApp.Controllers
                     {
                         return NotFound();
                     }
+                    logger.LogError($"Some errro happedn while updating category {category.Id} : {ex.Message}");
                     return BadRequest();
                 }
             }

@@ -9,7 +9,7 @@ namespace DokanyApp.ViewModels
         public string Description { get; set; }
         public decimal Price { get; set; }
         public string[] ImagePaths { get; set; }
-        public int Category { get; set; }
+        public int CategoryId { get; set; }
         public string CreationDate { get; set; }
         public int Quantity { get; set; }
     }

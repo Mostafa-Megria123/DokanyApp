@@ -24,6 +24,7 @@ namespace DokanyApp.BLL.AutoMapperService
             CreateMap<OrderDTO, Order>();
 
             CreateMap<Product, ProductDTO>();
+            CreateMap<ProductDTO, Product>();
 
             CreateMap<User, AdminDTO>()
                 .ForMember(dest => dest.AdminId, act => act.MapFrom(src => src.Id))

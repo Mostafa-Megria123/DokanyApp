@@ -76,7 +76,7 @@ namespace DokanyApp.DAL
 
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.Property(e => e.CategoryName)
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -167,7 +167,7 @@ namespace DokanyApp.DAL
 
                 entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
 
-                entity.Property(e => e.ProductName)
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
