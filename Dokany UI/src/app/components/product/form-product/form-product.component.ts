@@ -85,7 +85,7 @@ export class FormProductComponent implements OnInit {
             event['body'].dbPaths
           )).subscribe(res => { }, err => { }, () => {
             this.toastr.success('Product Added Successfully.');
-            this._router.navigate(['/home/product']);
+            this._router.navigate(['/dashBoard/product']);
           });
         }
       });
@@ -104,7 +104,7 @@ export class FormProductComponent implements OnInit {
         event['body'] != undefined ? event['body'].dbPaths : [this.imageUrl]
       )).subscribe(res => { }, err => { }, () => {
         this.toastr.success('Product Updated Successfully');
-        this._router.navigate(['/home/product']);
+        this._router.navigate(['/dashBoard/product']);
       });
   }
 

@@ -1,6 +1,6 @@
 <br />
 <br />
-<a [routerLink]="['/home/category' , 0]" class="btn btn-success col-lg-3 col-md-4 col-6 text-light add-new-btn">Add New
+<a [routerLink]="['/dashBoard/category' , 0]" class="btn btn-success col-lg-3 col-md-4 col-6 text-light add-new-btn">Add New
   Category</a>
 <br />
 <br />
@@ -22,7 +22,7 @@
       <td><img [src]='getImage(category.imagePath)' alt="Category Image" width="100" height="100"></td>
       <td>{{category.categoryName}}</td>
       <td>{{category.description}}</td>
-      <td><a [routerLink]="['/home/category' , category.categoryId]" class="btn btn-info text-light"><i class="pi pi-pencil"></i></a></td>
+      <td><a [routerLink]="['/dashBoard/category' , category.categoryId]" class="btn btn-info text-light"><i class="pi pi-pencil"></i></a></td>
       <td><a class="btn btn-danger text-light" data-toggle="modal" data-target="#exampleModal"
           (click)="OnSetIdForDelete(category.categoryId)"><i class="pi pi-trash"></i></a></td>
     </tr>

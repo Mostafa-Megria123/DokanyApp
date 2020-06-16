@@ -19,11 +19,12 @@ import { HomeComponent } from './home/home.component';
 // ];
 // shery
 const routes: Routes = [
+  { path: '', redirectTo: '/myHome', pathMatch: 'full' },
   { path: 'myHome', component: HomeComponent },
 
-  {path: '', redirectTo: '/home', pathMatch: 'full'},
+  {path: '', redirectTo: '/dashBoard', pathMatch: 'full'},
   {
-      path: 'home', component: LeftNavbarComponent,
+      path: 'dashBoard', component: LeftNavbarComponent,
       children: [
           { path: 'product', component: ProductListComponent },
           { path: 'product/:id', component: FormProductComponent },

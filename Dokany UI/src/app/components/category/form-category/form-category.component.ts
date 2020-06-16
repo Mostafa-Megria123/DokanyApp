@@ -58,7 +58,7 @@ export class FormCategoryComponent implements OnInit {
           else if (event.type === HttpEventType.Response) {
             this.message = 'Upload success.';
             this.toastr.success('Category Added Successfully.');
-            this._router.navigate(['/home/categories']);
+            this._router.navigate(['/dashBoard/categories']);
           }
           if (event['body'] != undefined) {
             this._categoryService.add(new Category(
@@ -93,7 +93,7 @@ export class FormCategoryComponent implements OnInit {
             }, err => { },
               () => {
                 this.toastr.success('Category Updated Successfully');
-                this._router.navigate(['/home/categories']);
+                this._router.navigate(['/dashBoard/categories']);
               });
           }
         });

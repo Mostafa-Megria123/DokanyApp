@@ -1,7 +1,7 @@
 <div>
   <br />
   <br />
-  <a [routerLink]="['/home/product' , 0]" class="btn btn-success col-lg-3 col-md-4 col-6 text-light add-new-btn">Add New
+  <a [routerLink]="['/dashBoard/product' , 0]" class="btn btn-success col-lg-3 col-md-4 col-6 text-light add-new-btn">Add New
     Product</a>
   <br />
   <br />
@@ -28,7 +28,7 @@
       <td>{{ product?.quantity }}</td>
       <td>{{ getCategoryName(product.categoryId)}}</td>
       <td>{{ product?.creationDate }}</td>
-      <td><a [routerLink]="['/home/product' , product.productId]" class="btn btn-info text-light"><i class="pi pi-pencil"></i></a></td>
+      <td><a [routerLink]="['/dashBoard/product' , product.productId]" class="btn btn-info text-light"><i class="pi pi-pencil"></i></a></td>
       <td><a class="btn btn-primary text-light" (click)='OnShowDetail(product.productId)' data-toggle="modal" data-target="#modalDetail"><i class="pi pi-eye"></i></a></td>
       <td><a class="btn btn-danger text-light" data-toggle="modal" data-target="#exampleModal"
           (click)="OnSetIdForDelete(product.productId)"><i class="pi pi-trash"></i></a></td>
