@@ -6,6 +6,7 @@ import { CategoryListComponent } from './components/category/category-list/categ
 import { FormCategoryComponent } from './components/category/form-category/form-category.component';
 import { StepperComponent } from './components/order-wizard/stepper/stepper.component';
 import { LeftNavbarComponent } from './shared/left-navbar/left-navbar.component';
+import { HomeComponent } from './home/home.component';
 
 // eslam
 // const routes: Routes = [
@@ -18,6 +19,8 @@ import { LeftNavbarComponent } from './shared/left-navbar/left-navbar.component'
 // ];
 // shery
 const routes: Routes = [
+  { path: 'myHome', component: HomeComponent },
+
   {path: '', redirectTo: '/home', pathMatch: 'full'},
   {
       path: 'home', component: LeftNavbarComponent,

@@ -27,6 +27,7 @@ import { StepperComponent } from './components/order-wizard/stepper/stepper.comp
 import { LeftNavbarComponent } from './shared/left-navbar/left-navbar.component';
 import { FormOrderComponent } from './components/order/form-order/form-order.component';
 import { OrderListComponent } from './components/order/order-list/order-list.component';
+import { HomeComponent } from './home/home.component';
 
 const ngWizardConfig: NgWizardConfig = {
   theme: THEME.circles
@@ -49,7 +50,8 @@ const ngWizardConfig: NgWizardConfig = {
     StepperComponent,
     LeftNavbarComponent,
     FormOrderComponent,
-    OrderListComponent
+    OrderListComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
