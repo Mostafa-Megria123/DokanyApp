@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ProductListComponent } from './components/product/product-list/product-list.component';
-import { FormProductComponent } from './components/product/form-product/form-product.component';
-import { CategoryListComponent } from './components/category/category-list/category-list.component';
-import { FormCategoryComponent } from './components/category/form-category/form-category.component';
-import { StepperComponent } from './components/order-wizard/stepper/stepper.component';
+import { ProductListComponent } from './admin/components/product/product-list/product-list.component';
+import { FormProductComponent } from './admin/components/product/form-product/form-product.component';
+import { CategoryListComponent } from './admin/components/category/category-list/category-list.component';
+import { FormCategoryComponent } from './admin/components/category/form-category/form-category.component';
+import { StepperComponent } from './admin/components/order-wizard/stepper/stepper.component';
 import { LeftNavbarComponent } from './shared/left-navbar/left-navbar.component';
 import { HomeComponent } from './home/home.component';
 

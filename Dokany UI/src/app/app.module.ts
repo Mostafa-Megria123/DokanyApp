@@ -11,23 +11,24 @@ import { GalleriaModule } from 'primeng/galleria';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgWizardModule, NgWizardConfig, THEME } from 'ng-wizard';
-import { FormProductComponent } from './components/product/form-product/form-product.component';
-import { ProductListComponent } from './components/product/product-list/product-list.component';
-import { FormCategoryComponent } from './components/category/form-category/form-category.component';
-import { CategoryListComponent } from './components/category/category-list/category-list.component';
-import { Step1Component } from './components/order-wizard/step1/step1.component';
-import { Step2Component } from './components/order-wizard/step2/step2.component';
-import { Step3Component } from './components/order-wizard/step3/step3.component';
-import { LastStepComponent } from './components/order-wizard/last-step/last-step.component';
-import { OrderSummaryComponent } from './components/order-wizard/order-summary/order-summary.component';
-import { NavComponent } from './components/shared/nav/nav.component';
+import { FormProductComponent } from './admin/components/product/form-product/form-product.component';
+import { ProductListComponent } from './admin/components/product/product-list/product-list.component';
+import { FormCategoryComponent } from './admin/components/category/form-category/form-category.component';
+import { CategoryListComponent } from './admin/components/category/category-list/category-list.component';
+import { Step1Component } from './admin/components/order-wizard/step1/step1.component';
+import { Step2Component } from './admin/components/order-wizard/step2/step2.component';
+import { Step3Component } from './admin/components/order-wizard/step3/step3.component';
+import { LastStepComponent } from './admin/components/order-wizard/last-step/last-step.component';
+import { OrderSummaryComponent } from './admin/components/order-wizard/order-summary/order-summary.component';
+import { NavComponent } from './admin/components/shared/nav/nav.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LayoutComponent } from './components/shared/layout/layout.component';
-import { StepperComponent } from './components/order-wizard/stepper/stepper.component';
+import { LayoutComponent } from './admin/components/shared/layout/layout.component';
+import { StepperComponent } from './admin/components/order-wizard/stepper/stepper.component';
 import { LeftNavbarComponent } from './shared/left-navbar/left-navbar.component';
-import { FormOrderComponent } from './components/order/form-order/form-order.component';
-import { OrderListComponent } from './components/order/order-list/order-list.component';
+import { FormOrderComponent } from './admin/components/order/form-order/form-order.component';
+import { OrderListComponent } from './admin/components/order/order-list/order-list.component';
 import { HomeComponent } from './home/home.component';
+import { ProductComponent } from './home/product/product.component';
 
 const ngWizardConfig: NgWizardConfig = {
   theme: THEME.circles
@@ -51,7 +52,8 @@ const ngWizardConfig: NgWizardConfig = {
     LeftNavbarComponent,
     FormOrderComponent,
     OrderListComponent,
-    HomeComponent
+    HomeComponent,
+    ProductComponent
   ],
   imports: [
     BrowserModule,
